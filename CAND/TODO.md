@@ -1,0 +1,2 @@
+- [x] Update CAND/action.page.php to collect all form fields (fname, lname, email, contact, event type, guest count, date), send an email with the data to aiguasante@gmail.com, and display a confirmation message.
+- [ ] Test the form submission after PHP is set up (run local server and submit form to verify email is sent).

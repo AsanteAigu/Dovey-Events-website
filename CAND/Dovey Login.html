@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dovey Register</title>
+    <link rel="icon" href="Dovey Logo.png">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        .event{
+          width: 30px;  
+            height: 30px;
+        }
+        body {
+            background-color: rgb(240, 224, 255);
+            font-family: 'Playfair Display', serif;
+            padding: 30px;
+        }
+        form{
+            max-width: 500px;
+            margin: 0% auto;
+            background-color: white;
+            font-family: 'Playfair Display', serif;
+            padding: 20px;
+            border-radius: 15px;
+        }
+        label{
+            display: block;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        input[type="text"], input[type="email"], select, input[type="date"] {
+            width: 100%;
+            padding: 7px;
+            margin: 8px 0 15px 0;
+            border: 1px solid #ccc;
+            border-radius: 15px;
+            font-size: 15px;
+            font-family: 'Playfair Display', serif;
+            box-sizing: border-box;
+        }
+        input[type='submit']{
+            font-size: 15px;
+            color  : white;
+            font-weight: bold;
+            background-color: rgb(240, 224, 255);
+            border: #ccc;
+            width : 100px;
+            height : 50px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            border-radius: 10px ;
+
+        }
+        input[type='submit']:hover{
+            background-color: rgb(163, 80, 196);
+        }
+    </style>
+</head>
+<body>
+    <form  name="donny"  action="https://formspree.io/f/mpwkwoad" method="POST">
+    <form action="action.page.php" target="_self" method = 'get' autocomplete="on">
+    <label for="First Name">First Name:</label> <br>
+     <input type="text" placeholder="Type your first name" name="fname" required><br><br>
+    <label for="Last Name">Last Name:</label> <br>
+     <input type="text" placeholder="Type your last name" name="lname" required autocomplete="on"><br><br>
+    <label for="E-mail">E-mail address:</label><br>
+     <input type="email" placeholder="Type your e-mail address" name="email" required><br><br>
+    <label for="Phone Number">Phone number:</label> <br>
+     <input type="text" placeholder="Type your phone number" name="contact" required><br><br>
+    <label for="Event Type">Event Type: </label> <br>
+    <select name="event type" id="event" width="40px" height="30px">
+        <option value="">--Select an event--</option>
+        <option value="Wedding">Wedding</option>
+        <option value="Birthday">Birthday</option>
+        <option value="Bridal Party">Bridal Party</option>
+        <option value="Baby Christening">Baby Christenin</option>
+        <option value="Funeral">Funeral</option>
+    </select>
+<br>
+<br>
+    <label for="guest count">Guest Count:</label><br>
+    <select name="guest count" id="guest count">
+        <option value="">--Select guest count--</option>
+        <option value="50">50</option>
+        <option value="100">100</option>
+        <option value="150">150</option>
+        <option value="200">200</option>
+    </select>
+    <br>
+    <br>
+    <label for="date">Event Date</label><br>
+    <input type="date" id="date" name="date">
+    <br>
+    <br>
+
+    <input type="submit" value="Submit">
+     </form>
+    </form>
+</body>
+</html>
