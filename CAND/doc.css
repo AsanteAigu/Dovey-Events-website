@@ -1,0 +1,10 @@
+            img.logo{
+            width : 200px;
+            border-radius: 50px;
+            float: left;
+            margin-right : 10px;
+            }
+            p.username{
+            font-weight: bold;
+            }
+

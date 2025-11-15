@@ -1,0 +1,166 @@
+The <hr> tag defines a thematic break in an HTML page, and is most often displayed as a horizontal rule.
+The HTML <br> element defines a line break.
+The HTML <pre> element defines preformatted text.
+The CSS background-color property defines the background color for an HTML element.
+background-image:url(d)
+<b> - Bold text
+<strong> - Important text
+<i> - Italic text
+<em> - Emphasized text
+<mark> - Marked text
+<small> - Smaller text
+<del> - Deleted text
+<ins> - Inserted text
+<sub> - Subscript text
+<sup> - Superscript text
+The HTML <blockquote> element defines a section that is quoted from another source.
+The HTML <q> tag defines a short quotation.
+The text in the <address> element usually renders in italic, and browsers will always add
+The HTML <cite> tag defines the title of a creative work (e.g. a book, a poem, a song, a movie, a painting, a sculpture, etc.).
+
+Note: A person's name is not the title of a work.
+
+The text in the <cite> element usually renders in italic.
+Border Color
+border:2px solid Tomato
+Color Values
+In HTML, colors can also be specified using RGB values, HEX values, HSL values, RGBA values, and HSLA values.
+
+The following three <div> elements have their background color set with RGB, HEX, and HSL values:
+
+rgb(255, 99, 71)
+#ff6347
+hsl(9, 100%, 64%)
+The following two <div> elements have their background color set with RGBA and HSLA values, which add an Alpha channel to the color (here we have 50% transparency):
+
+rgba(255, 99, 71, 0.5)
+hsla(9, 100%, 64%, 0.5)
+An inline CSS is used to apply a unique style to a single HTML element.
+
+An inline CSS uses the style attribute of an HTML element.
+
+The following example sets the text color of the <h1> element to blue, and the text color of the <p> element to red:
+
+Example
+<h1 style="color:blue;">A Blue Heading</h1>
+
+<p style="color:red;">A red paragraph.</p>
+Use <link...> for external CSS
+CSS border creates a border arouns the monitor
+Use the HTML style attribute for inline styling
+Use the HTML <style> element to define internal CSS
+Use the HTML <link> element to refer to an external CSS file
+Use the HTML <head> element to store <style> and <link> elements
+Use the CSS color property for text colors
+Use the CSS font-family property for text fonts
+Use the CSS font-size property for text sizes
+Use the CSS border property for borders
+Use the CSS padding property for space inside the border
+Use the CSS margin property for space outside the Border
+
+HTML Links - The target Attribute
+By default, the linked page will be displayed in the current browser window. To change this, you must specify another target for the link.
+
+The target attribute specifies where to open the linked document.
+
+The target attribute can have one of the following values:
+
+_self - Default. Opens the document in the same window/tab as it was clicked
+_blank - Opens the document in a new window or tab
+_parent - Opens the document in the parent frame
+_top - Opens the document in the full body of the window
+Button as a Link
+To use an HTML button as a link, you have to add some JavaScript code.\
+<button onclick="document.location='default.asp'">HTML Tutorial</button>
+
+<style>
+a:link {
+  color: green;
+  background-color: transparent;
+  text-decoration: none;
+}
+
+a:visited {
+  color: pink;
+  background-color: transparent;
+  text-decoration: none;
+}
+
+a:hover {
+  color: red;
+  background-color: transparent;
+  text-decoration: underline;
+}
+
+a:active {
+  color: yellow;
+  background-color: transparent;
+  text-decoration: underline;
+}
+</style>
+How To Add a Favicon in HTML
+<link rel="icon" type="image/x-icon" href="/images/favicon.ico">
+To add a border, use the CSS border property on table, th, and td elements:
+  border: 1pyou csn also add background color and stuff to itx solid black;
+An unordered list starts with the <ul> tag. Each list item starts with the <li> tag.
+An ordered list starts with the <ol> tag. Each list item starts with the <li> tag.
+The <dl> tag defines the description list, the <dt> tag defines the term (name), and the <dd> tag describes each term:
+An inline element does not start on a new line.
+
+An inline element only takes up as much width as necessary.
+
+This is a <span> element inside a paragraph
+
+The CSS float property is used for positioning and formatting content and allows elements to be positioned horizontally, rather than vertically.
+
+<style>
+.mycontainer {
+  width:100%;
+  overflow:auto;
+}
+.mycontainer div 
+  width:33%;
+  float:left;
+
+If you change the <div> element's display property from block to inline-block, the <div> elements will no longer add a line break before and after, and will be displayed side by side instead of on top of each other.
+<style>
+.grid-container {
+  display: grid;
+  grid-template-columns: 33% 33% 33%;
+}
+</style>
+To create a class; write a period (.) character, followed by a class name. Then, define the CSS properties within curly braces {}:
+
+The HTML <iframe> tag specifies an inline frame
+The src attribute defines the URL of the page to embed
+Always include a title attribute (for screen readers)
+The height and width attributes specify the size of the iframe
+Use border:none; to remove the border around the iframe
+<iframe src="demo_iframe.htm" name="iframe_a" title="Iframe Example"></iframe>
+srcrpt defines a cleint side script JavaScriptnoscript uses an alternate for people who donsuppoer  client side scripts
+Setting The Viewport
+To create a responsive website, add the following <meta> tag to all your web pages:
+
+Example
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+If the CSS width property is set to 100%, the image will be responsive and scale up and down:
+if you are using a whtasapp link you should use the absilute url https
+
+he HTML <input> element is the most used form element.
+
+An <input> element can be displayed in many ways, depending on the type attribute.
+
+Here are some examples:
+
+Type	Description
+We use labe to label how the text input will be like
+<input type="text">	Displays a single-line text input field
+<input type="radio">	Displays a radio button (for selecting one of many choices)
+<input type="checkbox">	Displays a checkbox (for selecting zero or more of many choices)
+<input type="submit">	Displays a submit button (for submitting the form)
+<input type="button">	Displays a clickable button
+select files 
+  <label for="files">Select files:</label>
+  <input type="file" id="files" name="files" multiple>
+  autocompletes hels the browser to complete it
