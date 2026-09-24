@@ -10,7 +10,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,500;0,600;1,500&family=Manrope:wght@400;500;600&display=swap" />
+  <script src="/js/boot.js"></script>
   <link rel="stylesheet" href="/css/styles.css" />
+  <link rel="stylesheet" href="/css/motion.css" />
 </head>
 <body>
   <header class="site-header on-paper">
@@ -27,18 +29,18 @@
 
   <main class="wrap">
     <div class="page-head">
-      <span class="eyebrow">About</span>
-      <h1>Where every detail <em>matters</em></h1>
+      <span class="eyebrow" data-reveal="up">About</span>
+      <h1 data-reveal="lines">Where every detail <em>matters</em></h1>
     </div>
 
     <article class="about">
-      <p class="about-lead">At Dovey Events, we curate exceptional and unforgettable experiences that reflect elegance, style and sophistication.</p>
-      <div class="about-body">
+      <p class="about-lead" data-reveal="lines">At Dovey Events, we curate exceptional and unforgettable experiences that reflect elegance, style and sophistication.</p>
+      <div class="about-body" data-reveal="stagger">
         <p>Whether it's a wedding, bridal party, birthday, baby christening or funeral, our expert team transforms every space into a masterpiece of beauty and meaning.</p>
         <p>We offer bespoke event packages designed around your guest list, for 50, 100, 150 or 200 guests. Each one arrives fully styled: themed backdrops, elegant couple chairs, exquisite centrepieces, luxury linens, artistic florals and a sparkling dance floor for your celebration.</p>
         <p>Every detail matters. Let us bring your dream event to life with class, colour and creative perfection.</p>
         <div class="about-actions">
-          <a class="btn btn-accent" href="/book">Book your date <span class="arrow" aria-hidden="true">→</span></a>
+          <a class="btn btn-accent" href="/book" data-magnetic>Book your date <span class="arrow" aria-hidden="true">→</span></a>
           <a class="btn btn-ghost" href="/packages">See packages</a>
         </div>
       </div>
@@ -52,6 +54,17 @@
     </div>
   </footer>
 
+  <nav class="float-bar" aria-label="Quick links">
+    <a href="/packages">Packages</a>
+    <a href="/about">About</a>
+    <a class="is-primary" href="/book">Book a date</a>
+  </nav>
+
+  <script defer src="/vendor/gsap.min.js"></script>
+  <script defer src="/vendor/ScrollTrigger.min.js"></script>
+  <script defer src="/vendor/SplitText.min.js"></script>
+  <script defer src="/vendor/lenis.min.js"></script>
   <script type="module" src="/js/common.js"></script>
+  <script type="module" src="/js/motion.js"></script>
 </body>
 </html>

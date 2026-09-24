@@ -185,7 +185,8 @@ function restoreDraft() {
   const wanted = new URLSearchParams(location.search).get('package') || draft.packageId;
   const radio = form.querySelector(`input[name="packageId"][value="${CSS.escape(wanted || '')}"]`);
   if (radio) radio.checked = true;
-  const occasion = form.querySelector(`input[name="occasion"][value="${CSS.escape(draft.occasion || '')}"]`);
+  const wantedOccasion = new URLSearchParams(location.search).get('occasion') || draft.occasion;
+  const occasion = form.querySelector(`input[name="occasion"][value="${CSS.escape(wantedOccasion || '')}"]`);
   if (occasion) occasion.checked = true;
   for (const key of ['name', 'email', 'phone', 'venue', 'notes', 'eventDate']) {
     if (draft[key]) field(key).value = draft[key];

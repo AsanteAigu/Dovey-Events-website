@@ -171,9 +171,27 @@ function start() {
   let visible = true;
   let frame = 0;
 
+  // The wind picks up while the page scrolls, and the ribbons lean toward the pointer.
+  let windTime = 4;
+  let windSpeed = 1;
+  let lastScroll = window.scrollY;
+  const pointer = { x: 0, y: 0 };
+  window.addEventListener('pointermove', (event) => {
+    pointer.x = event.clientX / window.innerWidth - 0.5;
+    pointer.y = event.clientY / window.innerHeight - 0.5;
+  }, { passive: true });
+
   function render() {
-    const t = reduceMotion.matches ? 4 : clock.getElapsedTime();
-    for (const r of ribbons) r.update(t);
+    const dt = Math.min(clock.getDelta(), 0.05);
+    if (!reduceMotion.matches) {
+      const scrolled = Math.abs(window.scrollY - lastScroll);
+      lastScroll = window.scrollY;
+      windSpeed += (1 + Math.min(scrolled * 0.12, 5) - windSpeed) * 0.06;
+      windTime += dt * windSpeed;
+      group.rotation.y += (pointer.x * 0.35 - group.rotation.y) * 0.04;
+      group.rotation.x += (pointer.y * 0.18 - group.rotation.x) * 0.04;
+    }
+    for (const r of ribbons) r.update(windTime);
     renderer.render(scene, camera);
   }
 

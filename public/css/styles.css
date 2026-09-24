@@ -667,3 +667,7 @@ td.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
 .about-lead { margin: 0; font-family: var(--font-display); font-size: clamp(1.7rem, 3.4vw, 2.4rem); line-height: 1.25; }
 .about-body p { margin: 0 0 1.2rem; color: var(--ink-soft); font-size: 1.05rem; }
 .about-actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 2rem; }
+
+/* Home: occasions heading */
+.occasions-title { margin: 1rem 0 0; font-size: clamp(2rem, 4.2vw, 3.2rem); }
+.band blockquote > span { display: block; }

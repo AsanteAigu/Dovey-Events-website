@@ -1,0 +1,250 @@
+/* ==========================================================================
+   Dovey Events — motion layer (pairs with js/boot.js and js/motion.js)
+   ========================================================================== */
+
+/* Lenis smooth scrolling */
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-stopped { overflow: hidden; }
+
+/* Reveal targets start hidden only when motion is on. If motion.js never runs,
+   the fallback animation shows them after a moment anyway. */
+html.motion [data-reveal] { opacity: 0; animation: reveal-fallback 0.6s 2.5s forwards; }
+html.motion-ready [data-reveal] { animation: none; }
+@keyframes reveal-fallback { to { opacity: 1; } }
+.line { padding-bottom: 0.06em; } /* room for descenders inside SplitText masks */
+
+/* ---------- Page transitions (native cross-document View Transitions) ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition { navigation: auto; }
+  ::view-transition { background: #1d0d27; }
+  ::view-transition-old(root) { animation: page-out 0.6s cubic-bezier(0.65, 0, 0.35, 1) both; }
+  ::view-transition-new(root) { animation: page-in 0.9s 0.15s cubic-bezier(0.76, 0, 0.24, 1) both; }
+}
+@keyframes page-out {
+  to { transform: translateY(-4%) scale(0.94); opacity: 0.2; filter: blur(2px); }
+}
+@keyframes page-in {
+  from { clip-path: inset(100% 0 0 0 round 48px 48px 0 0); transform: translateY(6%); }
+  to { clip-path: inset(0 0 0 0 round 0); transform: none; }
+}
+
+/* ---------- First-visit intro ---------- */
+.intro { display: none; }
+html.intro-pending .intro,
+.intro.is-playing {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  background: var(--ink);
+  color: var(--paper);
+  border-radius: 0 0 48px 48px;
+  /* Safety net: never leave the page covered if motion.js fails to load. */
+  animation: intro-fallback 0.4s 3.5s forwards;
+}
+html.motion-ready .intro { animation: none; }
+.intro.is-playing { will-change: transform; }
+@keyframes intro-fallback { to { opacity: 0; visibility: hidden; } }
+html.intro-pending body { overflow: hidden; }
+html.intro-pending .rise { animation-play-state: paused; }
+.intro-inner { display: grid; justify-items: center; gap: 1.1rem; }
+.intro-mark { width: 64px; height: auto; }
+.intro-word { display: flex; overflow: hidden; font-family: var(--font-display); font-size: clamp(3.5rem, 11vw, 7rem); line-height: 1.05; }
+.intro-word span { display: inline-block; }
+.intro-sub { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.5em; text-transform: uppercase; color: #cfa6e6; }
+
+/* ---------- Nav hover underline ---------- */
+.nav a:not(.btn) { position: relative; }
+.nav a:not(.btn)::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -4px;
+  height: 1px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.45s var(--ease);
+}
+.nav a:not(.btn):hover::after,
+.nav a[aria-current="page"]::after { transform: scaleX(1); transform-origin: left; }
+.nav a[aria-current="page"] { text-decoration: none; }
+
+/* ---------- Hero badge ---------- */
+.hero-badge {
+  position: absolute;
+  right: var(--gutter);
+  bottom: clamp(32px, 8vh, 80px);
+  z-index: 1;
+  width: 148px;
+  height: 148px;
+  display: grid;
+  place-items: center;
+  color: var(--paper);
+  text-decoration: none;
+}
+.hero-badge svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.hero-badge text { font: 600 10.5px var(--font-body); letter-spacing: 0.26em; text-transform: uppercase; fill: currentColor; }
+.hero-badge-core {
+  width: 62px;
+  height: 62px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--accent);
+  transition: transform 0.5s var(--ease), background 0.3s;
+}
+.hero-badge-core img { width: 26px; height: auto; filter: brightness(0) invert(1); }
+.hero-badge:hover .hero-badge-core { transform: scale(1.12); background: #ad69d1; }
+.badge-text { transform-box: view-box; transform-origin: 50% 50%; }
+@media (max-width: 860px) { .hero-badge { display: none; } }
+@media (prefers-reduced-motion: no-preference) {
+  html:not(.motion-ready) .badge-text { animation: spin 22s linear infinite; }
+}
+
+/* ---------- Marquee ---------- */
+.marquee {
+  overflow: hidden;
+  padding-block: clamp(1.25rem, 3vw, 2rem);
+  border-bottom: 1px solid var(--line);
+  background: var(--paper);
+}
+.marquee-track { display: flex; width: max-content; }
+.marquee-item {
+  display: inline-flex;
+  align-items: center;
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+  padding-right: clamp(1.5rem, 3vw, 2.5rem);
+  font-family: var(--font-display);
+  font-size: clamp(2.4rem, 6vw, 4.8rem);
+  line-height: 1.1;
+  white-space: nowrap;
+}
+.marquee-item:nth-child(even) { font-style: italic; color: var(--accent); }
+.marquee-item::after { content: "✦"; font-size: 0.4em; font-style: normal; color: var(--accent); }
+
+/* ---------- Occasion links ---------- */
+.occasion-list li { padding: 0; }
+.occasion-list li:hover { padding-left: 0; color: inherit; }
+.occasion-list a {
+  position: relative;
+  z-index: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.9rem 0;
+  overflow: hidden;
+  text-decoration: none;
+  transition: color 0.4s var(--ease), padding 0.5s var(--ease);
+}
+.occasion-list a::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--ink);
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition: transform 0.5s var(--ease);
+}
+.occasion-list a:hover,
+.occasion-list a:focus-visible { color: var(--paper); padding-inline: 1.25rem; }
+.occasion-list a:hover::before,
+.occasion-list a:focus-visible::before { transform: scaleY(1); }
+.occasion-list .go {
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #cfa6e6;
+  opacity: 0;
+  transform: translateX(-12px);
+  transition: opacity 0.4s, transform 0.5s var(--ease);
+}
+.occasion-list a:hover .go,
+.occasion-list a:focus-visible .go { opacity: 1; transform: none; }
+
+/* ---------- Floating action bar ---------- */
+.float-bar {
+  position: fixed;
+  left: 50%;
+  bottom: 18px;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  max-width: calc(100vw - 24px);
+  padding: 0.35rem;
+  border-radius: 999px;
+  background: rgb(11 13 18 / 0.86);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 18px 40px -18px rgb(11 13 18 / 0.6);
+  transform: translate(-50%, 160%);
+  transition: transform 0.7s var(--ease);
+}
+.float-bar.is-visible { transform: translate(-50%, 0); }
+.float-bar a {
+  padding: 0.65rem 1rem;
+  border-radius: 999px;
+  color: var(--paper);
+  font-size: 0.86rem;
+  font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.3s;
+}
+.float-bar a:hover { background: rgb(246 241 234 / 0.1); }
+.float-bar a.is-primary { background: var(--accent); font-weight: 600; }
+.float-bar a.is-primary:hover { background: #ad69d1; }
+
+/* ---------- Cursor (mouse only; created by motion.js) ---------- */
+.cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 90;
+  width: 12px;
+  height: 12px;
+  margin: -6px 0 0 -6px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--accent);
+  pointer-events: none;
+  opacity: 0;
+  transition: width 0.45s var(--ease), height 0.45s var(--ease), margin 0.45s var(--ease),
+              opacity 0.3s, background 0.3s, scale 0.2s;
+}
+.cursor.is-visible { opacity: 0.9; }
+.cursor.is-link { width: 44px; height: 44px; margin: -22px 0 0 -22px; background: rgb(157 86 194 / 0.22); }
+.cursor.has-label { width: 88px; height: 88px; margin: -44px 0 0 -44px; background: var(--accent); opacity: 1; }
+.cursor.is-down { scale: 0.8; }
+.cursor span {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #fff;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.cursor.has-label span { opacity: 1; }
+
+/* ---------- Confirmation ticket ---------- */
+html.motion-ready .ticket { animation: ticket-in 0.9s var(--ease) both; }
+@keyframes ticket-in { from { opacity: 0; transform: translateY(30px) scale(0.97); } }
+.ticket-mark path { stroke-dasharray: 60; }
+html.motion-ready .ticket-mark path { animation: draw 0.9s 0.35s var(--ease) both; }
+@keyframes draw { from { stroke-dashoffset: 60; } to { stroke-dashoffset: 0; } }
+
+/* ---------- Reduced motion: everything static and visible ---------- */
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal] { opacity: 1 !important; }
+  .float-bar { transition: none; }
+}
