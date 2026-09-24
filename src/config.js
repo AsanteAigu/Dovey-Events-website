@@ -10,8 +10,14 @@ export function loadConfig(env = process.env) {
   const isProd = env.NODE_ENV === 'production';
   const config = {
     port: int(env, 'PORT', 3000),
-    publicUrl: (env.PUBLIC_URL || 'http://localhost:3000').replace(/\/$/, ''),
-    databasePath: env.DATABASE_PATH || 'data/dovey.db',
+    // Where Paystack sends customers back. On Vercel, defaults to the production domain.
+    publicUrl: (env.PUBLIC_URL
+      || (env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${env.VERCEL_PROJECT_PRODUCTION_URL}` : 'http://localhost:3000')
+    ).replace(/\/$/, ''),
+    // Supabase (or any Postgres) connection string. Without it, local development
+    // uses an embedded Postgres stored in localDataDir.
+    databaseUrl: env.DATABASE_URL || '',
+    localDataDir: env.LOCAL_DATA_DIR || 'data/pglite',
     paystackSecretKey: env.PAYSTACK_SECRET_KEY || '',
     adminPassword: env.ADMIN_PASSWORD || '',
     sessionSecret: env.SESSION_SECRET || '',
@@ -26,7 +32,7 @@ export function loadConfig(env = process.env) {
     throw new Error('DEPOSIT_PERCENT must be between 1 and 100');
   }
   if (isProd) {
-    for (const key of ['paystackSecretKey', 'adminPassword', 'sessionSecret']) {
+    for (const key of ['databaseUrl', 'paystackSecretKey', 'adminPassword', 'sessionSecret']) {
       if (!config[key]) throw new Error(`Missing required setting in production: ${key}`);
     }
     if (config.sessionSecret.length < 32) throw new Error('SESSION_SECRET must be at least 32 characters');

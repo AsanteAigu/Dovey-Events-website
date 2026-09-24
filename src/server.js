@@ -1,23 +1,21 @@
-import { createApp } from './app.js';
-import { loadConfig } from './config.js';
-import { openDatabase } from './db.js';
-import { createPaystackClient } from './paystack.js';
+// Long-running server for local development and hosts like Railway.
+import { createServerApp } from './bootstrap.js';
 
-const config = loadConfig();
-const db = openDatabase(config.databasePath);
-const paystack = createPaystackClient(config.paystackSecretKey);
-const app = createApp({ db, config, paystack });
+const { app, db, config, ensureReady } = await createServerApp();
 
+if (!config.databaseUrl) console.warn(`DATABASE_URL is not set: using a local database in ${config.localDataDir}.`);
 if (!config.paystackSecretKey) console.warn('PAYSTACK_SECRET_KEY is not set: bookings will be held but not payable.');
 if (!config.adminPassword) console.warn('ADMIN_PASSWORD is not set: the admin dashboard is disabled.');
+
+await ensureReady();
 
 const server = app.listen(config.port, () => {
   console.log(`Dovey Events is running at http://localhost:${config.port}`);
 });
 
 function shutdown() {
-  server.close(() => {
-    db.close();
+  server.close(async () => {
+    await db.close();
     process.exit(0);
   });
 }

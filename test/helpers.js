@@ -1,7 +1,7 @@
 import { createHmac } from 'node:crypto';
 import { createApp } from '../src/app.js';
 import { loadConfig } from '../src/config.js';
-import { openDatabase } from '../src/db.js';
+import { createDatabase, migrate } from '../src/db.js';
 
 export const SECRET = 'sk_test_fake';
 
@@ -55,10 +55,11 @@ export function validBooking(overrides = {}) {
   };
 }
 
-/** Boots the app on a random port with an in-memory database. */
+/** Boots the app on a random port with a fresh in-memory Postgres (PGlite). */
 export async function startServer({ env = {}, clock } = {}) {
   const config = loadConfig({ ADMIN_PASSWORD: 'let-me-in', MAX_EVENTS_PER_DAY: '2', ...env });
-  const db = openDatabase(':memory:');
+  const db = await createDatabase({ databaseUrl: '', localDataDir: 'memory://' });
+  await migrate(db);
   const paystack = fakePaystack();
   const silent = { warn() {}, error() {} };
   const app = createApp({ db, config, paystack, clock, logger: silent });
@@ -81,6 +82,6 @@ export async function startServer({ env = {}, clock } = {}) {
     paystack,
     db,
     request,
-    close: () => new Promise((resolve) => server.close(() => { db.close(); resolve(); })),
+    close: () => new Promise((resolve) => server.close(() => db.close().then(resolve))),
   };
 }

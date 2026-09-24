@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Packages — Dovey Events</title>
+  <meta name="description" content="Dovey Events décor packages for 50, 100, 150 and 200 guests. Every package includes backdrops, couple chairs, centrepieces, linens, florals and a dance floor." />
+  <meta name="theme-color" content="#f6f1ea" />
+  <link rel="icon" href="/img/dovey-logo.png" type="image/png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,500;0,600;1,500&family=Manrope:wght@400;500;600&display=swap" />
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+  <header class="site-header on-paper">
+    <div class="wrap">
+      <a class="brand" href="/"><img src="/img/dovey-logo.png" alt="" width="34" height="31" />Dovey<small>Events</small></a>
+      <nav class="nav" aria-label="Main">
+        <a class="hide-sm" href="/packages" aria-current="page">Packages</a>
+        <a class="hide-sm" href="/about">About</a>
+        <a href="/confirmation">My booking</a>
+        <a class="btn btn-sm" href="/book">Book a date</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="wrap page-head">
+      <span class="eyebrow">Packages</span>
+      <h1>Bespoke packages for <em>your</em> guest list</h1>
+      <p class="lede">Choose the size that fits your celebration. Every package comes fully dressed, and the price you see is the price you pay.</p>
+    </div>
+
+    <section class="wrap section flush-top">
+      <div class="packages has-included" id="package-list" aria-live="polite">
+        <div class="skeleton span-all"></div>
+      </div>
+      <div class="included">
+        <h3>Every package <em>includes</em></h3>
+        <ul id="included-list"></ul>
+      </div>
+    </section>
+
+    <section class="section flush-top">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <span class="eyebrow">How booking works</span>
+            <h2>Three steps to a <em>held</em> date</h2>
+          </div>
+        </div>
+        <div class="steps">
+          <div class="step">
+            <h3>Choose your package</h3>
+            <p>Tell us the occasion and how many guests you're expecting. You'll see the full price straight away.</p>
+          </div>
+          <div class="step">
+            <h3>Pick a date</h3>
+            <p>We take a limited number of events each day so every one gets our full attention. We'll tell you at once if your date is open.</p>
+          </div>
+          <div class="step">
+            <h3>Pay the deposit</h3>
+            <p>Pay <span data-deposit>30%</span> securely with Mobile Money or card through Paystack. Your date is confirmed the moment it goes through.</p>
+          </div>
+        </div>
+        <div class="page-cta">
+          <a class="btn btn-accent" href="/book">Book your date <span class="arrow" aria-hidden="true">→</span></a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <span>© <span data-year></span> Dovey Events · Where every detail matters</span>
+      <span><a href="/packages">Packages</a> · <a href="/about">About</a> · <a href="/confirmation">Find my booking</a></span>
+    </div>
+  </footer>
+
+  <script type="module" src="/js/common.js"></script>
+  <script type="module" src="/js/packages.js"></script>
+</body>
+</html>

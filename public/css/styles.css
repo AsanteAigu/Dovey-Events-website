@@ -637,3 +637,33 @@ td.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
 .included li::before { content: "✦"; color: #cfa6e6; font-size: 0.8em; line-height: 1.9; }
 .packages.has-included { border-radius: var(--radius) var(--radius) 0 0; }
 .occasions-line { margin-top: 1.25rem; color: var(--muted); font-size: 0.92rem; }
+
+/* Current page in the nav */
+.nav a[aria-current='page'] { opacity: 1; text-decoration: underline; text-underline-offset: 6px; text-decoration-color: var(--accent); }
+
+/* Home: occasions */
+.occasions-grid { display: grid; gap: 2.5rem; align-items: start; }
+@media (min-width: 860px) { .occasions-grid { grid-template-columns: 1fr 1.4fr; gap: 4rem; } }
+.occasions-grid .lede { margin: 1rem 0 1.5rem; }
+.occasion-list { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+.occasion-list li {
+  padding: 0.9rem 0;
+  border-bottom: 1px solid var(--line);
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  line-height: 1.1;
+  transition: color 0.3s var(--ease), padding 0.3s var(--ease);
+}
+.occasion-list li:hover { color: var(--accent); padding-left: 0.5rem; }
+.text-link { display: inline-flex; gap: 0.4rem; font-weight: 600; font-size: 0.95rem; text-decoration: none; border-bottom: 1px solid var(--accent); padding-bottom: 2px; }
+.text-link .arrow { transition: transform 0.25s var(--ease); }
+.text-link:hover .arrow { transform: translateX(3px); }
+
+.page-cta { margin-top: clamp(2.5rem, 6vw, 4rem); }
+
+/* About */
+.about { display: grid; gap: 2rem 4rem; padding-bottom: clamp(72px, 10vw, 120px); }
+@media (min-width: 860px) { .about { grid-template-columns: 1fr 1.2fr; } }
+.about-lead { margin: 0; font-family: var(--font-display); font-size: clamp(1.7rem, 3.4vw, 2.4rem); line-height: 1.25; }
+.about-body p { margin: 0 0 1.2rem; color: var(--ink-soft); font-size: 1.05rem; }
+.about-actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 2rem; }

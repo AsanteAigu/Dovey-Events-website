@@ -1,60 +1,79 @@
-import { DatabaseSync } from 'node:sqlite';
-import { mkdirSync } from 'node:fs';
-import { dirname } from 'node:path';
+import { readFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import pg from 'pg';
 
-const SCHEMA = `
-CREATE TABLE IF NOT EXISTS bookings (
-  id              INTEGER PRIMARY KEY,
-  reference       TEXT    NOT NULL UNIQUE,
-  package_id      TEXT    NOT NULL,
-  occasion        TEXT    NOT NULL,
-  event_date      TEXT    NOT NULL,             -- YYYY-MM-DD
-  guests          INTEGER NOT NULL,
-  add_ons         TEXT    NOT NULL DEFAULT '[]', -- JSON array of add-on ids
-  venue           TEXT    NOT NULL DEFAULT '',
-  notes           TEXT    NOT NULL DEFAULT '',
-  customer_name   TEXT    NOT NULL,
-  customer_email  TEXT    NOT NULL,
-  customer_phone  TEXT    NOT NULL,
-  total_amount    INTEGER NOT NULL,             -- pesewas
-  deposit_amount  INTEGER NOT NULL,             -- pesewas
-  amount_paid     INTEGER NOT NULL DEFAULT 0,   -- pesewas
-  status          TEXT    NOT NULL DEFAULT 'pending_payment',
-  hold_expires_at TEXT,                         -- unpaid bookings release their date after this
-  created_at      TEXT    NOT NULL,
-  updated_at      TEXT    NOT NULL
-);
-CREATE INDEX IF NOT EXISTS bookings_date_status ON bookings (event_date, status);
+const SCHEMA = readFileSync(join(dirname(fileURLToPath(import.meta.url)), '../db/schema.sql'), 'utf8');
 
-CREATE TABLE IF NOT EXISTS payments (
-  id          INTEGER PRIMARY KEY,
-  reference   TEXT    NOT NULL UNIQUE,          -- Paystack transaction reference
-  booking_id  INTEGER NOT NULL REFERENCES bookings(id),
-  amount      INTEGER NOT NULL,                 -- pesewas
-  status      TEXT    NOT NULL DEFAULT 'initialized', -- initialized | success
-  paid_at     TEXT,
-  created_at  TEXT    NOT NULL
-);
-CREATE INDEX IF NOT EXISTS payments_booking ON payments (booking_id);
-`;
+const DATE_OID = 1082;
 
-export function openDatabase(path) {
-  if (path !== ':memory:') mkdirSync(dirname(path), { recursive: true });
-  const db = new DatabaseSync(path);
-  db.exec('PRAGMA journal_mode = WAL; PRAGMA foreign_keys = ON; PRAGMA busy_timeout = 5000;');
-  db.exec(SCHEMA);
-  return db;
+/**
+ * A small database interface shared by production (Supabase via node-postgres)
+ * and local development/tests (PGlite, an in-process Postgres):
+ *
+ *   query(text, params)  -> rows
+ *   transaction(fn)      -> fn receives { query } bound to one transaction
+ *   exec(sql)            -> runs multi-statement SQL (migrations)
+ *   close()
+ */
+export async function createDatabase({ databaseUrl, localDataDir }) {
+  return databaseUrl ? createPostgres(databaseUrl) : createPglite(localDataDir);
 }
 
-/** Runs fn inside a write transaction; rolls back if it throws. */
-export function transaction(db, fn) {
-  db.exec('BEGIN IMMEDIATE');
-  try {
-    const result = fn();
-    db.exec('COMMIT');
-    return result;
-  } catch (err) {
-    db.exec('ROLLBACK');
-    throw err;
-  }
+function createPostgres(databaseUrl) {
+  const url = new URL(databaseUrl);
+  const isLocal = ['localhost', '127.0.0.1'].includes(url.hostname);
+  url.searchParams.delete('sslmode'); // TLS is configured below instead
+
+  const pool = new pg.Pool({
+    connectionString: url.toString(),
+    // Supabase requires TLS. Its pooler certificate isn't in Node's default CA
+    // store, so set DATABASE_CA_CERT (from Supabase → Database settings) to verify it.
+    ssl: isLocal ? false : process.env.DATABASE_CA_CERT
+      ? { ca: process.env.DATABASE_CA_CERT }
+      : { rejectUnauthorized: false },
+    max: 3, // serverless: keep each instance's footprint small; Supabase's pooler does the rest
+    idleTimeoutMillis: 10_000,
+    connectionTimeoutMillis: 10_000,
+  });
+  // Keep DATE columns as 'YYYY-MM-DD' strings instead of local-midnight Date objects.
+  const types = { getTypeParser: (oid, format) => (oid === DATE_OID ? (v) => v : pg.types.getTypeParser(oid, format)) };
+  const run = (client) => async (text, params) => (await client.query({ text, values: params, types })).rows;
+
+  return {
+    query: run(pool),
+    async transaction(fn) {
+      const client = await pool.connect();
+      try {
+        await client.query('BEGIN');
+        const result = await fn({ query: run(client) });
+        await client.query('COMMIT');
+        return result;
+      } catch (err) {
+        await client.query('ROLLBACK').catch(() => {});
+        throw err;
+      } finally {
+        client.release();
+      }
+    },
+    exec: (sql) => pool.query(sql),
+    close: () => pool.end(),
+  };
+}
+
+async function createPglite(dataDir) {
+  const { PGlite } = await import('@electric-sql/pglite');
+  const db = new PGlite(dataDir, { parsers: { [DATE_OID]: (v) => v } });
+  const run = (target) => async (text, params) => (await target.query(text, params)).rows;
+
+  return {
+    query: run(db),
+    transaction: (fn) => db.transaction((tx) => fn({ query: run(tx) })),
+    exec: (sql) => db.exec(sql),
+    close: () => db.close(),
+  };
+}
+
+export async function migrate(db) {
+  await db.exec(SCHEMA);
 }
