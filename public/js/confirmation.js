@@ -1,4 +1,5 @@
 import { api, formatDate, h, money, setBusy, STATUS_LABELS } from './common.js';
+import { saveTicket } from './ticket-image.js';
 
 const view = document.getElementById('view');
 const pageHead = document.getElementById('page-head');
@@ -94,10 +95,34 @@ function ticket(booking) {
         booking.amountPaid > 0 && balance > 0 && detail('Balance before the event', money(balance), true),
       ),
       h('div', { class: 'ticket-actions' },
-        canPay ? retryButton(booking.reference) : h('a', { class: 'btn', href: '/' }, 'Back to Dovey Events'),
+        canPay ? retryButton(booking.reference) : ticketButtons(booking),
       ),
     ),
   );
+}
+
+// Paid bookings get a ticket to keep: an image for phones, or print / save as PDF.
+function ticketButtons(booking) {
+  if (!['confirmed', 'completed'].includes(booking.status)) {
+    return h('a', { class: 'btn', href: '/' }, 'Back to Dovey Events');
+  }
+  const alert = h('div', { class: 'alert alert-bad', role: 'alert' });
+  const save = h('button', { class: 'btn btn-accent', type: 'button' },
+    'Save ticket ', h('span', { class: 'arrow', 'aria-hidden': 'true' }, '↓'));
+  save.addEventListener('click', async () => {
+    alert.textContent = '';
+    setBusy(save, true, 'Preparing…');
+    try {
+      await saveTicket(booking);
+    } catch {
+      alert.textContent = "Couldn't create the ticket image. Try Print / PDF instead.";
+    } finally {
+      setBusy(save, false);
+    }
+  });
+  const print = h('button', { class: 'btn btn-ghost', type: 'button' }, 'Print / PDF');
+  print.addEventListener('click', () => window.print());
+  return [save, print, alert];
 }
 
 function detail(label, value, full = false) {

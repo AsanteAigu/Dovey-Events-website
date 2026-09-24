@@ -672,3 +672,17 @@ td.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
 .occasions-title { margin: 1rem 0 0; font-size: clamp(2rem, 4.2vw, 3.2rem); }
 .band blockquote > span { display: block; }
 .summary .summary-empty { margin-bottom: 1.25rem; }
+
+/* ==========================================================================
+   Print: just the ticket (Print / PDF on the confirmation page)
+   ========================================================================== */
+@media print {
+  @page { margin: 16mm; }
+  body { background: #fff; }
+  .site-header, .site-footer, .page-head, .ticket-actions, .menu-toggle, .mobile-menu,
+  .float-bar, .pay-bar, .cursor, .intro { display: none !important; }
+  .ticket { max-width: none; margin: 0; box-shadow: none; border-color: #cfc3b2; break-inside: avoid; animation: none !important; }
+  .ticket-body::before, .ticket-body::after { background: #fff; }
+  .ticket-mark path { animation: none !important; }
+  .ticket-ref { color: #7a3a9e; }
+}
