@@ -11,7 +11,7 @@ export function loadConfig(env = process.env) {
   const config = {
     port: int(env, 'PORT', 3000),
     publicUrl: (env.PUBLIC_URL || 'http://localhost:3000').replace(/\/$/, ''),
-    databasePath: env.DATABASE_PATH || 'data/dovim.db',
+    databasePath: env.DATABASE_PATH || 'data/dovey.db',
     paystackSecretKey: env.PAYSTACK_SECRET_KEY || '',
     adminPassword: env.ADMIN_PASSWORD || '',
     sessionSecret: env.SESSION_SECRET || '',

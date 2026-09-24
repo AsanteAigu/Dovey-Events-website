@@ -12,7 +12,7 @@ if (!config.paystackSecretKey) console.warn('PAYSTACK_SECRET_KEY is not set: boo
 if (!config.adminPassword) console.warn('ADMIN_PASSWORD is not set: the admin dashboard is disabled.');
 
 const server = app.listen(config.port, () => {
-  console.log(`Dovim is running at http://localhost:${config.port}`);
+  console.log(`Dovey Events is running at http://localhost:${config.port}`);
 });
 
 function shutdown() {

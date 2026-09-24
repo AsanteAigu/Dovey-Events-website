@@ -5,7 +5,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createAdminAuth } from './auth.js';
 import { ADMIN_STATUSES, createBookingService, toAdminBooking, toPublicBooking } from './bookings.js';
-import { ADD_ONS, PACKAGES } from './catalog.js';
+import { ADD_ONS, INCLUDED, OCCASIONS, PACKAGES } from './catalog.js';
 import { AppError, notFound } from './errors.js';
 import { PaystackError } from './paystack.js';
 
@@ -80,6 +80,8 @@ export function createApp({ db, config, paystack, clock, logger = console }) {
   app.get('/api/catalog', (req, res) => {
     res.json({
       packages: PACKAGES,
+      included: INCLUDED,
+      occasions: OCCASIONS,
       addOns: ADD_ONS,
       depositPercent: config.depositPercent,
       minLeadDays: config.minLeadDays,

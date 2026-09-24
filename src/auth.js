@@ -1,7 +1,7 @@
 import { createHash, createHmac, randomBytes, timingSafeEqual } from 'node:crypto';
 import { AppError } from './errors.js';
 
-const COOKIE = 'dovim_admin';
+const COOKIE = 'dovey_admin';
 const SESSION_MS = 12 * 60 * 60 * 1000;
 const LOGIN_WINDOW_MS = 15 * 60 * 1000;
 const MAX_LOGIN_ATTEMPTS = 10;

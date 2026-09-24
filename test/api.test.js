@@ -13,19 +13,19 @@ describe('booking API', () => {
   it('creates a booking, holds the date and returns a Paystack checkout link', async () => {
     const res = await t.request('POST', '/api/bookings', { body: validBooking() });
     assert.equal(res.status, 201);
-    assert.match(res.body.booking.reference, /^DVM-[A-Z0-9]{8}$/);
+    assert.match(res.body.booking.reference, /^DVE-[A-Z0-9]{8}$/);
     assert.equal(res.body.booking.status, 'pending_payment');
-    assert.equal(res.body.booking.depositAmount, 204_000);
+    assert.equal(res.body.booking.depositAmount, 240_000);
     assert.match(res.body.authorizationUrl, /^https:\/\/checkout\.paystack\.test\//);
 
     const [init] = t.paystack.initialized;
-    assert.equal(init.amount, 204_000, 'charges the server-computed deposit');
+    assert.equal(init.amount, 240_000, 'charges the server-computed deposit');
     assert.equal(init.email, 'ama@example.com');
   });
 
   it('ignores prices sent by the client', async () => {
     const res = await t.request('POST', '/api/bookings', { body: validBooking({ total: 1, deposit: 1 }) });
-    assert.equal(res.body.booking.depositAmount, 204_000);
+    assert.equal(res.body.booking.depositAmount, 240_000);
   });
 
   it('returns field errors for bad input', async () => {
@@ -57,11 +57,11 @@ describe('booking API', () => {
     res = await t.request('GET', `/api/payments/verify?reference=${payRef}`);
     assert.equal(res.body.paid, true);
     assert.equal(res.body.booking.status, 'confirmed');
-    assert.equal(res.body.booking.amountPaid, 204_000);
+    assert.equal(res.body.booking.amountPaid, 240_000);
 
     // Verifying again must not double-count the payment.
     res = await t.request('GET', `/api/payments/verify?reference=${payRef}`);
-    assert.equal(res.body.booking.amountPaid, 204_000);
+    assert.equal(res.body.booking.amountPaid, 240_000);
   });
 
   it('keeps the date held if Paystack is down, and lets the customer retry', async () => {
@@ -109,7 +109,7 @@ describe('Paystack webhook', () => {
     let lookup = await t.request('GET', `/api/bookings/${body.booking.reference}?email=ama@example.com`);
     assert.equal(lookup.body.booking.status, 'pending_payment');
 
-    const full = event(payRef, 204_000);
+    const full = event(payRef, 240_000);
     assert.equal((await t.request('POST', '/api/paystack/webhook', { raw: full, headers: headers(full) })).status, 200);
     lookup = await t.request('GET', `/api/bookings/${body.booking.reference}?email=ama@example.com`);
     assert.equal(lookup.body.booking.status, 'confirmed');
@@ -169,7 +169,7 @@ describe('admin API', () => {
   });
 
   it('rejects a forged session cookie', async () => {
-    const forged = `dovim_admin=${Date.now() + 1e6}.deadbeef`;
+    const forged = `dovey_admin=${Date.now() + 1e6}.deadbeef`;
     assert.equal((await t.request('GET', '/api/admin/bookings', { headers: { cookie: forged } })).status, 401);
   });
 });

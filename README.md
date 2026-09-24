@@ -1,6 +1,6 @@
-# Dovim
+# Dovey Events
 
-Event planning and booking site. Customers pick a package, choose a date and guest count, add extras, and pay a deposit with **Paystack** (Mobile Money or card) to confirm their date. An admin dashboard lists every booking.
+*Where every detail matters.* Booking site for Dovey Events, event décor and styling in Ghana. Customers pick the occasion and a package (50, 100, 150 or 200 guests), choose a date, and pay a deposit with **Paystack** (Mobile Money or card) to confirm their date. An admin dashboard lists every booking.
 
 ## Run it
 
@@ -36,7 +36,9 @@ Payments are confirmed two ways, both safe to repeat: when the customer returns 
 - If a hold lapses, the date is released. If a payment still arrives and the date has since been taken, the booking is marked **Needs review** so the team can rebook or refund.
 - Admins can mark bookings confirmed, completed or cancelled.
 
-To change packages, prices or extras, edit `src/catalog.js`.
+To change packages, prices, occasions, what every package includes, or to add optional extras, edit `src/catalog.js`.
+
+> **The package prices are placeholders** (GH₵8,000 / 14,000 / 19,000 / 24,000). Set the real prices in `src/catalog.js` before going live.
 
 ## Project layout
 
@@ -47,9 +49,10 @@ src/
   bookings.js   validation, pricing, date holds, payment settlement
   paystack.js   Paystack API client and webhook signature check
   auth.js       admin sign-in (signed, HttpOnly cookie)
-  catalog.js    packages and add-ons
+  catalog.js    packages, occasions, inclusions and extras
   db.js         SQLite schema
 public/         HTML, CSS and browser JS (no build step)
+CAND/           the original hand-built pages
 test/           node:test suites (a fake Paystack stands in for the real one)
 ```
 

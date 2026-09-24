@@ -50,7 +50,7 @@ function heading(html) {
 }
 
 function retryButton(reference) {
-  const button = h('button', { class: 'btn btn-gold', type: 'button' }, 'Pay deposit now ', h('span', { class: 'arrow', 'aria-hidden': 'true' }, '→'));
+  const button = h('button', { class: 'btn btn-accent', type: 'button' }, 'Pay deposit now ', h('span', { class: 'arrow', 'aria-hidden': 'true' }, '→'));
   const alert = h('div', { class: 'alert alert-bad', role: 'alert' });
   button.addEventListener('click', async () => {
     alert.textContent = '';
@@ -80,7 +80,8 @@ function ticket(booking) {
     ),
     h('div', { class: 'ticket-body' },
       h('dl', { class: 'details' },
-        detail('Event', booking.package.name, true),
+        detail('Occasion', booking.occasion.name),
+        detail('Package', booking.package.name),
         detail('Date', formatDate(booking.eventDate), true),
         detail('Guests', String(booking.guests)),
         detail('Status', STATUS_LABELS[booking.status] ?? booking.status),
@@ -93,7 +94,7 @@ function ticket(booking) {
         booking.amountPaid > 0 && balance > 0 && detail('Balance before the event', money(balance), true),
       ),
       h('div', { class: 'ticket-actions' },
-        canPay ? retryButton(booking.reference) : h('a', { class: 'btn', href: '/' }, 'Back to Dovim'),
+        canPay ? retryButton(booking.reference) : h('a', { class: 'btn', href: '/' }, 'Back to Dovey Events'),
       ),
     ),
   );
@@ -149,7 +150,7 @@ function showLookup(prefill = {}) {
   const form = h('form', { class: 'lookup', novalidate: true },
     h('div', { class: 'field' },
       h('label', { for: 'ref' }, 'Booking reference'),
-      h('input', { class: 'input mono', id: 'ref', name: 'ref', placeholder: 'DVM-XXXXXXXX', required: true, value: prefill.ref ?? '', autocomplete: 'off' }),
+      h('input', { class: 'input mono', id: 'ref', name: 'ref', placeholder: 'DVE-XXXXXXXX', required: true, value: prefill.ref ?? '', autocomplete: 'off' }),
     ),
     h('div', { class: 'field' },
       h('label', { for: 'lookup-email' }, 'Email'),

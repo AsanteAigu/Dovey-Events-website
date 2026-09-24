@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS bookings (
   id              INTEGER PRIMARY KEY,
   reference       TEXT    NOT NULL UNIQUE,
   package_id      TEXT    NOT NULL,
+  occasion        TEXT    NOT NULL,
   event_date      TEXT    NOT NULL,             -- YYYY-MM-DD
   guests          INTEGER NOT NULL,
   add_ons         TEXT    NOT NULL DEFAULT '[]', -- JSON array of add-on ids

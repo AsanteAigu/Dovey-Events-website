@@ -5,6 +5,7 @@ const form = document.getElementById('booking-form');
 const field = (name) => form.elements.namedItem(name);
 const packageChoices = document.getElementById('package-choices');
 const addOnChoices = document.getElementById('addon-choices');
+const occasionChoices = document.getElementById('occasion-choices');
 const summary = document.getElementById('summary-content');
 const dateInput = field('eventDate');
 const guestsInput = field('guests');
@@ -13,7 +14,7 @@ const guestHint = document.getElementById('guest-hint');
 const submit = document.getElementById('submit');
 const alertBox = document.getElementById('form-alert');
 
-const DRAFT_KEY = 'dovim:booking-draft';
+const DRAFT_KEY = 'dovey:booking-draft';
 let catalog;
 let dateIsFree = null;
 
@@ -24,6 +25,7 @@ const selectedAddOns = () => [...form.querySelectorAll('input[name="addOns"]:che
 function readForm() {
   return {
     packageId: field('packageId')?.value || '',
+    occasion: field('occasion')?.value || '',
     eventDate: dateInput.value,
     guests: guestsInput.value === '' ? null : Number(guestsInput.value),
     addOns: selectedAddOns(),
@@ -38,6 +40,15 @@ function readForm() {
 // ---------- Rendering ----------
 
 function renderChoices() {
+  occasionChoices.replaceChildren(
+    ...catalog.occasions.map((occasion) =>
+      h('label', { class: 'chip' },
+        h('input', { type: 'radio', name: 'occasion', value: occasion.id, required: true }),
+        h('span', {}, occasion.name),
+      ),
+    ),
+  );
+
   packageChoices.replaceChildren(
     ...catalog.packages.map((pkg) =>
       h('label', { class: 'choice' },
@@ -46,12 +57,13 @@ function renderChoices() {
           h('span', { class: 'choice-title' }, pkg.name),
           h('span', { class: 'choice-sub' }, pkg.tagline),
           h('span', { class: 'choice-price' },
-            `From ${money(pkg.basePrice)}${pkg.perGuest ? ` + ${money(pkg.perGuest)}/guest` : ''}`),
+            pkg.perGuest ? `From ${money(pkg.basePrice)} + ${money(pkg.perGuest)}/guest` : money(pkg.basePrice)),
         ),
       ),
     ),
   );
 
+  document.getElementById('extras').hidden = catalog.addOns.length === 0;
   addOnChoices.replaceChildren(
     ...catalog.addOns.map((addOn) =>
       h('label', { class: 'choice' },
@@ -70,8 +82,7 @@ function updateGuestLimits() {
   if (!pkg) return;
   guestsInput.min = pkg.minGuests;
   guestsInput.max = pkg.maxGuests;
-  guestHint.textContent = `${pkg.minGuests}–${pkg.maxGuests} guests for this package`;
-  if (guestsInput.value === '') guestsInput.value = pkg.minGuests;
+  guestHint.textContent = `Up to ${pkg.maxGuests} guests with this package`;
 }
 
 let quoteSeq = 0;
@@ -98,7 +109,7 @@ function renderSummary(pkg, quote) {
     h('div', { class: 'summary-total' }, h('span', {}, 'Event total'), h('strong', {}, money(quote.total))),
     h('div', { class: 'summary-deposit' },
       h('div', {}, h('span', {}, `Deposit today (${catalog.depositPercent}%)`), h('strong', {}, money(quote.deposit))),
-      h('p', {}, date ? `Holds ${date} for ${pkg.name.toLowerCase()}.` : 'Pick a date to hold it.'),
+      h('p', {}, date ? `Holds ${date} for you.` : 'Pick a date to hold it.'),
     ),
   );
 }
@@ -163,8 +174,8 @@ function showErrors(details) {
 
 function saveDraft() {
   try {
-    const { name, email, phone, venue, notes, packageId, eventDate, guests, addOns } = readForm();
-    sessionStorage.setItem(DRAFT_KEY, JSON.stringify({ name, email, phone, venue, notes, packageId, eventDate, guests, addOns }));
+    const { name, email, phone, venue, notes, packageId, occasion, eventDate, guests, addOns } = readForm();
+    sessionStorage.setItem(DRAFT_KEY, JSON.stringify({ name, email, phone, venue, notes, packageId, occasion, eventDate, guests, addOns }));
   } catch { /* storage unavailable */ }
 }
 
@@ -174,6 +185,8 @@ function restoreDraft() {
   const wanted = new URLSearchParams(location.search).get('package') || draft.packageId;
   const radio = form.querySelector(`input[name="packageId"][value="${CSS.escape(wanted || '')}"]`);
   if (radio) radio.checked = true;
+  const occasion = form.querySelector(`input[name="occasion"][value="${CSS.escape(draft.occasion || '')}"]`);
+  if (occasion) occasion.checked = true;
   for (const key of ['name', 'email', 'phone', 'venue', 'notes', 'eventDate']) {
     if (draft[key]) field(key).value = draft[key];
   }
@@ -213,7 +226,7 @@ form.addEventListener('submit', async (event) => {
   try {
     const { authorizationUrl, booking } = await api('/api/bookings', { method: 'POST', body: readForm() });
     try { sessionStorage.removeItem(DRAFT_KEY); } catch { /* ignore */ }
-    try { sessionStorage.setItem('dovim:last-booking', booking.reference); } catch { /* ignore */ }
+    try { sessionStorage.setItem('dovey:last-booking', booking.reference); } catch { /* ignore */ }
     location.assign(authorizationUrl);
   } catch (err) {
     setBusy(submit, false);

@@ -42,10 +42,11 @@ export function isoDaysFromNow(days, now = new Date()) {
 
 export function validBooking(overrides = {}) {
   return {
-    packageId: 'intimate',
+    packageId: 'guests-50',
+    occasion: 'birthday',
     eventDate: isoDaysFromNow(30),
-    guests: 20,
-    addOns: ['photo'],
+    guests: 40,
+    addOns: [],
     name: 'Ama Mensah',
     email: 'ama@example.com',
     phone: '024 123 4567',

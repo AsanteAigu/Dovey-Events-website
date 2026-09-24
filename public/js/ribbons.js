@@ -150,7 +150,7 @@ function start() {
     new Ribbon({
       top: 9.5, bottom: -8.5, spread: 3.2, turns: 1.1, twistTurns: -1.8,
       phase: 2.4, windAmp: 0.9, windFreq: 4.2, windSpeed: 0.45, seed: 10, width: 0.7, bandFreq: 14,
-      a: v3(0.55, 0.47, 0.38), b: v3(0.4, 0.3, 0.2), c: v3(0.8, 0.6, 0.4), d: v3(0.0, 0.1, 0.25), // champagne
+      a: v3(0.55, 0.36, 0.7), b: v3(0.3, 0.22, 0.28), c: v3(0.8, 0.7, 0.6), d: v3(0.05, 0.15, 0.2), // orchid (logo purple)
     }),
   ];
 

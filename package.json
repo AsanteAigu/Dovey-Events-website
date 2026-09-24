@@ -1,8 +1,8 @@
 {
-  "name": "dovim",
+  "name": "dovey-events",
   "version": "1.0.0",
   "private": true,
-  "description": "Dovim — event planning and booking, with Paystack deposits.",
+  "description": "Dovey Events: event décor bookings with Paystack deposits.",
   "type": "module",
   "engines": {
     "node": ">=22.13"

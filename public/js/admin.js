@@ -56,7 +56,7 @@ function matchesFilter(b, value = filter) {
 function matchesSearch(b) {
   const q = search.value.trim().toLowerCase();
   if (!q) return true;
-  return [b.reference, b.customerName, b.customerEmail, b.customerPhone, b.package.name, b.venue]
+  return [b.reference, b.customerName, b.customerEmail, b.customerPhone, b.package.name, b.occasion.name, b.venue]
     .some((v) => v && v.toLowerCase().includes(q));
 }
 
@@ -103,7 +103,7 @@ function row(b) {
       h('span', { class: 'sub' }, h('a', { href: `tel:${b.customerPhone.replace(/[^\d+]/g, '')}` }, b.customerPhone)),
     ),
     h('td', {},
-      b.package.name,
+      `${b.occasion.name} · ${b.package.name}`,
       h('span', { class: 'sub' }, `${b.guests} guests${b.venue ? ` · ${b.venue}` : ''}`),
       b.addOns.length ? h('span', { class: 'sub' }, b.addOns.map((a) => a.name).join(', ')) : null,
       b.notes ? h('span', { class: 'sub', title: b.notes }, `“${b.notes.length > 80 ? `${b.notes.slice(0, 80)}…` : b.notes}”`) : null,

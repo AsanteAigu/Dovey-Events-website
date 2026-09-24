@@ -1,5 +1,5 @@
 import { randomInt } from 'node:crypto';
-import { ADD_ONS, findAddOn, findPackage } from './catalog.js';
+import { ADD_ONS, findAddOn, findOccasion, findPackage } from './catalog.js';
 import { transaction } from './db.js';
 import { badRequest, conflict, notFound } from './errors.js';
 
@@ -36,7 +36,7 @@ const text = (value, max) => (typeof value === 'string' ? value.trim().slice(0, 
 export function quote({ packageId, guests, addOns = [] }, depositPercent) {
   const pkg = findPackage(packageId);
   if (!pkg) throw badRequest('Unknown package');
-  const lines = [{ label: `${pkg.name} (base)`, amount: pkg.basePrice }];
+  const lines = [{ label: pkg.perGuest ? `${pkg.name} (base)` : `${pkg.name} package`, amount: pkg.basePrice }];
   if (pkg.perGuest) lines.push({ label: `${guests} guests`, amount: pkg.perGuest * guests });
   for (const id of addOns) {
     const addOn = findAddOn(id);
@@ -54,6 +54,9 @@ export function validateBookingInput(body, { today, minLeadDays }) {
 
   const pkg = findPackage(input.packageId);
   if (!pkg) errors.packageId = 'Choose a package.';
+
+  const occasion = findOccasion(input.occasion);
+  if (!occasion) errors.occasion = 'Tell us the occasion.';
 
   const eventDate = text(input.eventDate, 10);
   const earliest = isoDay(addDays(today, minLeadDays));
@@ -83,6 +86,7 @@ export function validateBookingInput(body, { today, minLeadDays }) {
 
   return {
     packageId: pkg.id,
+    occasion: occasion.id,
     eventDate,
     guests,
     addOns: ADD_ONS.map((a) => a.id).filter((id) => addOns.includes(id)), // stable order
@@ -108,10 +112,10 @@ export function createBookingService(db, config, { clock = () => new Date() } = 
        GROUP BY event_date HAVING COUNT(*) >= :max`,
     ),
     insert: db.prepare(
-      `INSERT INTO bookings (reference, package_id, event_date, guests, add_ons, venue, notes,
+      `INSERT INTO bookings (reference, package_id, occasion, event_date, guests, add_ons, venue, notes,
          customer_name, customer_email, customer_phone, total_amount, deposit_amount,
          status, hold_expires_at, created_at, updated_at)
-       VALUES (:reference, :packageId, :eventDate, :guests, :addOns, :venue, :notes,
+       VALUES (:reference, :packageId, :occasion, :eventDate, :guests, :addOns, :venue, :notes,
          :name, :email, :phone, :total, :deposit, 'pending_payment', :holdUntil, :now, :now)`,
     ),
     byReference: db.prepare('SELECT * FROM bookings WHERE reference = ?'),
@@ -145,7 +149,7 @@ export function createBookingService(db, config, { clock = () => new Date() } = 
 
   function newReference() {
     for (;;) {
-      const reference = `DVM-${randomCode(8)}`;
+      const reference = `DVE-${randomCode(8)}`;
       if (!stmt.byReference.get(reference)) return reference;
     }
   }
@@ -281,6 +285,7 @@ export function toPublicBooking(row) {
     reference: row.reference,
     status: row.status,
     package: { id: pkg.id, name: pkg.name },
+    occasion: { id: row.occasion, name: findOccasion(row.occasion)?.name ?? row.occasion },
     eventDate: row.event_date,
     guests: row.guests,
     addOns: JSON.parse(row.add_ons).map((id) => ({ id, name: findAddOn(id)?.name ?? id })),

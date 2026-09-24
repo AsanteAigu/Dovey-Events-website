@@ -3,9 +3,9 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Book your date — Dovim</title>
+  <title>Book your date — Dovey Events</title>
   <meta name="theme-color" content="#f6f1ea" />
-  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="icon" href="/img/dovey-logo.png" type="image/png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,500;0,600;1,500&family=Manrope:wght@400;500;600&display=swap" />
@@ -14,7 +14,7 @@
 <body>
   <header class="site-header on-paper">
     <div class="wrap">
-      <a class="brand" href="/">Dovim<span class="brand-dot" aria-hidden="true"></span></a>
+      <a class="brand" href="/"><img src="/img/dovey-logo.png" alt="" width="34" height="31" />Dovey<small>Events</small></a>
       <nav class="nav" aria-label="Main">
         <a class="hide-sm" href="/#packages">Packages</a>
         <a href="/confirmation">My booking</a>
@@ -32,7 +32,10 @@
     <form class="booking-layout" id="booking-form" novalidate>
       <div>
         <fieldset class="fieldset">
-          <legend><span>i.</span> The occasion</legend>
+          <legend>The occasion</legend>
+          <div class="chips" id="occasion-choices" role="radiogroup" aria-label="Occasion"></div>
+          <p class="field-error" data-error-for="occasion"></p>
+          <p class="fieldset-sub">Package</p>
           <div class="choice-grid" id="package-choices" role="radiogroup" aria-label="Package">
             <div class="skeleton span-all"></div>
           </div>
@@ -40,7 +43,7 @@
         </fieldset>
 
         <fieldset class="fieldset">
-          <legend><span>ii.</span> Date &amp; guests</legend>
+          <legend>Date &amp; guests</legend>
           <div class="fields two">
             <div class="field" data-field="eventDate">
               <label for="eventDate">Event date</label>
@@ -61,14 +64,14 @@
           </div>
         </fieldset>
 
-        <fieldset class="fieldset">
-          <legend><span>iii.</span> Extras</legend>
+        <fieldset class="fieldset" id="extras" hidden>
+          <legend>Extras</legend>
           <div class="choice-grid" id="addon-choices"></div>
           <p class="field-error" data-error-for="addOns"></p>
         </fieldset>
 
         <fieldset class="fieldset">
-          <legend><span>iv.</span> Your details</legend>
+          <legend>Your details</legend>
           <div class="fields two">
             <div class="field" data-field="name">
               <label for="name">Full name</label>
@@ -88,7 +91,7 @@
             </div>
             <div class="field full">
               <label for="notes">Anything we should know? <span class="hint">(optional)</span></label>
-              <textarea class="input" id="notes" name="notes" maxlength="2000" placeholder="Theme, colours, timings, dietary needs…"></textarea>
+              <textarea class="input" id="notes" name="notes" maxlength="2000" placeholder="Theme, colours, timings, anything special…"></textarea>
             </div>
           </div>
         </fieldset>
@@ -99,7 +102,7 @@
         <div id="summary-content">
           <p class="summary-empty">Choose a package to see your price.</p>
         </div>
-        <button class="btn btn-gold btn-block" type="submit" id="submit">
+        <button class="btn btn-accent btn-block" type="submit" id="submit">
           Pay deposit &amp; hold date <span class="arrow" aria-hidden="true">→</span>
         </button>
         <div class="alert alert-bad" id="form-alert" role="alert"></div>

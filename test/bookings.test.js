@@ -7,28 +7,31 @@ const today = new Date('2026-09-24T12:00:00Z');
 const opts = { today, minLeadDays: 7 };
 
 describe('quote', () => {
-  it('adds base price, per-guest price and add-ons, and rounds the deposit up', () => {
-    const q = quote({ packageId: 'intimate', guests: 20, addOns: ['photo'] }, 30);
-    // 3500 + 20 × 40 + 2500 = 6800 GHS
-    assert.equal(q.total, 680_000);
-    assert.equal(q.deposit, 204_000);
-    assert.equal(q.lines.length, 3);
+  it('prices a package and takes the deposit percentage of the total', () => {
+    const q = quote({ packageId: 'guests-50', guests: 40, addOns: [] }, 30);
+    assert.equal(q.total, 800_000); // GH₵8,000
+    assert.equal(q.deposit, 240_000);
+    assert.deepEqual(q.lines, [{ label: '50 Guests package', amount: 800_000 }]);
   });
 
   it('never produces fractional pesewas', () => {
-    const q = quote({ packageId: 'intimate', guests: 11, addOns: [] }, 33);
+    const q = quote({ packageId: 'guests-150', guests: 120, addOns: [] }, 33);
     assert.ok(Number.isInteger(q.deposit));
   });
 });
 
 describe('validateBookingInput', () => {
   it('accepts and normalises a good booking', () => {
-    const v = validateBookingInput(
-      validBooking({ eventDate: '2026-10-20', email: ' AMA@Example.com ', addOns: ['cake', 'photo', 'photo'] }),
-      opts,
-    );
+    const v = validateBookingInput(validBooking({ eventDate: '2026-10-20', email: ' AMA@Example.com ' }), opts);
     assert.equal(v.email, 'ama@example.com');
-    assert.deepEqual(v.addOns, ['photo', 'cake']);
+    assert.equal(v.occasion, 'birthday');
+  });
+
+  it('requires a known occasion', () => {
+    assert.throws(
+      () => validateBookingInput(validBooking({ eventDate: '2026-10-20', occasion: 'rave' }), opts),
+      (err) => !!err.details.occasion,
+    );
   });
 
   it('rejects dates inside the notice period, in the past, or impossible', () => {
@@ -40,17 +43,24 @@ describe('validateBookingInput', () => {
     }
   });
 
-  it('enforces the package guest range', () => {
+  it('enforces the package guest limit', () => {
     assert.throws(
-      () => validateBookingInput(validBooking({ eventDate: '2026-10-20', guests: 200 }), opts),
-      (err) => /10–60 guests/.test(err.details.guests),
+      () => validateBookingInput(validBooking({ eventDate: '2026-10-20', guests: 80 }), opts),
+      (err) => /1–50 guests/.test(err.details.guests),
+    );
+  });
+
+  it('rejects unknown extras', () => {
+    assert.throws(
+      () => validateBookingInput(validBooking({ eventDate: '2026-10-20', addOns: ['fireworks'] }), opts),
+      (err) => !!err.details.addOns,
     );
   });
 
   it('reports every bad field at once', () => {
     assert.throws(
       () => validateBookingInput({ packageId: 'nope', email: 'x', phone: '1' }, opts),
-      (err) => ['packageId', 'eventDate', 'guests', 'name', 'email', 'phone'].every((k) => k in err.details),
+      (err) => ['packageId', 'occasion', 'eventDate', 'guests', 'name', 'email', 'phone'].every((k) => k in err.details),
     );
   });
 });
