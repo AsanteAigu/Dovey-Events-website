@@ -95,22 +95,22 @@ const stat = (label, value) => h('div', { class: 'stat' }, h('small', {}, label)
 
 function row(b) {
   return h('tr', {},
-    h('td', { class: 'num' }, formatDate(b.eventDate, 'short')),
-    h('td', {}, h('span', { class: 'mono' }, b.reference)),
-    h('td', {},
+    h('td', { class: 'num', 'data-label': 'Date' }, formatDate(b.eventDate, 'short')),
+    h('td', { 'data-label': 'Reference' }, h('span', { class: 'mono' }, b.reference)),
+    h('td', { 'data-label': 'Client' },
       b.customerName,
       h('span', { class: 'sub' }, h('a', { href: `mailto:${b.customerEmail}` }, b.customerEmail)),
       h('span', { class: 'sub' }, h('a', { href: `tel:${b.customerPhone.replace(/[^\d+]/g, '')}` }, b.customerPhone)),
     ),
-    h('td', {},
+    h('td', { 'data-label': 'Event' },
       `${b.occasion.name} · ${b.package.name}`,
       h('span', { class: 'sub' }, `${b.guests} guests${b.venue ? ` · ${b.venue}` : ''}`),
       b.addOns.length ? h('span', { class: 'sub' }, b.addOns.map((a) => a.name).join(', ')) : null,
       b.notes ? h('span', { class: 'sub', title: b.notes }, `“${b.notes.length > 80 ? `${b.notes.slice(0, 80)}…` : b.notes}”`) : null,
     ),
-    h('td', { class: 'num' }, money(b.totalAmount)),
-    h('td', { class: 'num' }, money(b.amountPaid)),
-    h('td', {}, statusControl(b)),
+    h('td', { class: 'num', 'data-label': 'Total' }, money(b.totalAmount)),
+    h('td', { class: 'num', 'data-label': 'Paid' }, money(b.amountPaid)),
+    h('td', { 'data-label': 'Status' }, statusControl(b)),
   );
 }
 

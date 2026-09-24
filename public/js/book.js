@@ -13,6 +13,9 @@ const dateStatus = document.getElementById('date-status');
 const guestHint = document.getElementById('guest-hint');
 const submit = document.getElementById('submit');
 const alertBox = document.getElementById('form-alert');
+const payBar = document.getElementById('pay-bar');
+const payBarDeposit = document.getElementById('pay-bar-deposit');
+const payBarButton = payBar.querySelector('button');
 
 const DRAFT_KEY = 'dovey:booking-draft';
 let catalog;
@@ -101,6 +104,9 @@ async function updateQuote() {
 }
 
 function renderSummary(pkg, quote) {
+  payBarDeposit.textContent = money(quote.deposit);
+  hasQuote = true;
+  updatePayBar();
   const date = dateInput.value && dateIsFree !== false ? formatDate(dateInput.value) : null;
   summary.replaceChildren(
     h('ul', { class: 'summary-lines' },
@@ -113,6 +119,21 @@ function renderSummary(pkg, quote) {
     ),
   );
 }
+
+// ---------- Phone pay bar ----------
+// On phones the quote sits below the whole form, so a bar at the bottom of the
+// screen keeps the deposit and the pay button in reach. It steps aside while the
+// full quote is on screen.
+
+let hasQuote = false;
+let summaryVisible = false;
+function updatePayBar() {
+  payBar.classList.toggle('is-hidden', !hasQuote || summaryVisible);
+}
+new IntersectionObserver(([entry]) => {
+  summaryVisible = entry.isIntersecting;
+  updatePayBar();
+}).observe(document.querySelector('.summary'));
 
 // ---------- Date availability ----------
 
@@ -224,6 +245,7 @@ form.addEventListener('submit', async (event) => {
   }
 
   setBusy(submit, true, 'Holding your date…');
+  payBarButton.disabled = true;
   try {
     const { authorizationUrl, booking } = await api('/api/bookings', { method: 'POST', body: readForm() });
     try { sessionStorage.removeItem(DRAFT_KEY); } catch { /* ignore */ }
@@ -231,6 +253,7 @@ form.addEventListener('submit', async (event) => {
     location.assign(authorizationUrl);
   } catch (err) {
     setBusy(submit, false);
+    payBarButton.disabled = false;
     if (err.body?.details) showErrors(err.body.details);
     alertBox.textContent = err.message;
     if (err.status === 502 && err.body?.booking) {

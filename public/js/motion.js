@@ -60,6 +60,8 @@ function setupSmoothScroll() {
   if (!Lenis) return;
   lenis = new Lenis({ lerp: 0.1, anchors: true });
   lenis.on('scroll', ScrollTrigger.update);
+  // The phone menu locks the page behind it.
+  window.addEventListener('dovey:menu', (event) => (event.detail.open ? lenis.stop() : lenis.start()));
   gsap.ticker.add((time) => lenis.raf(time * 1000));
   gsap.ticker.lagSmoothing(0);
 }

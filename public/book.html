@@ -12,6 +12,7 @@
   <script src="/js/boot.js"></script>
   <link rel="stylesheet" href="/css/styles.css" />
   <link rel="stylesheet" href="/css/motion.css" />
+  <link rel="stylesheet" href="/css/mobile.css" />
 </head>
 <body>
   <header class="site-header on-paper">
@@ -114,11 +115,20 @@
     </form>
   </main>
 
+  <div class="pay-bar is-hidden" id="pay-bar" aria-hidden="true">
+    <div class="pay-bar-amount">
+      <small>Deposit today</small>
+      <strong id="pay-bar-deposit">—</strong>
+    </div>
+    <button class="btn btn-accent" type="submit" form="booking-form" tabindex="-1">Pay &amp; hold date <span class="arrow" aria-hidden="true">→</span></button>
+  </div>
+
   <script defer src="/vendor/gsap.min.js"></script>
   <script defer src="/vendor/ScrollTrigger.min.js"></script>
   <script defer src="/vendor/SplitText.min.js"></script>
   <script defer src="/vendor/lenis.min.js"></script>
   <script type="module" src="/js/book.js"></script>
+  <script type="module" src="/js/nav.js"></script>
   <script type="module" src="/js/motion.js"></script>
 </body>
 </html>

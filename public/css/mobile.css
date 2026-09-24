@@ -1,0 +1,205 @@
+/* ==========================================================================
+   Dovey Events — phones & small screens
+   ========================================================================== */
+
+/* ---------- Menu button & overlay (created by js/nav.js) ---------- */
+.menu-toggle { display: none; }
+
+@media (max-width: 720px) {
+  /* With the phone menu available, the header shows just the logo. */
+  html.has-menu .site-header .nav { display: none; }
+
+  .menu-toggle {
+    position: fixed;
+    top: max(14px, env(safe-area-inset-top));
+    right: 16px;
+    z-index: 70;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    min-height: 44px;
+    padding: 0 1rem 0 0.85rem;
+    border: 1px solid rgb(246 241 234 / 0.16);
+    border-radius: 999px;
+    background: rgb(11 13 18 / 0.82);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    color: var(--paper);
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .menu-toggle-lines { position: relative; width: 16px; height: 10px; }
+  .menu-toggle-lines i {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 1.5px;
+    border-radius: 2px;
+    background: currentColor;
+    transition: transform 0.45s var(--ease), top 0.45s var(--ease);
+  }
+  .menu-toggle-lines i:first-child { top: 1px; }
+  .menu-toggle-lines i:last-child { top: 7px; }
+  .menu-toggle[aria-expanded="true"] .menu-toggle-lines i:first-child { top: 4px; transform: rotate(45deg); }
+  .menu-toggle[aria-expanded="true"] .menu-toggle-lines i:last-child { top: 4px; transform: rotate(-45deg); }
+}
+
+.mobile-menu {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: calc(max(14px, env(safe-area-inset-top)) + 80px) 24px calc(28px + env(safe-area-inset-bottom));
+  background:
+    radial-gradient(80% 50% at 100% 0%, rgb(157 86 194 / 0.28), transparent 70%),
+    var(--ink);
+  color: var(--paper);
+  clip-path: circle(0 at calc(100% - 52px) 36px);
+  transition: clip-path 0.6s cubic-bezier(0.76, 0, 0.24, 1);
+  overflow-y: auto;
+}
+.mobile-menu.is-open { clip-path: circle(150% at calc(100% - 52px) 36px); }
+.mobile-menu[hidden] { display: none; }
+
+.mobile-menu-links { display: grid; }
+.mobile-menu-links a {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  padding: 0.55rem 0;
+  border-bottom: 1px solid rgb(246 241 234 / 0.1);
+  color: inherit;
+  text-decoration: none;
+  overflow: hidden;
+}
+.mobile-menu-index { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.1em; color: #cfa6e6; }
+.mobile-menu-text {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-size: clamp(2.6rem, 12vw, 3.6rem);
+  line-height: 1.1;
+  transform: translateY(110%);
+  transition: transform 0.7s var(--ease);
+  transition-delay: calc(0.12s + var(--i, 0) * 0.06s);
+}
+.mobile-menu.is-open .mobile-menu-text { transform: none; }
+.mobile-menu-links a[aria-current="page"] .mobile-menu-text { font-style: italic; color: #cfa6e6; }
+
+.mobile-menu-foot {
+  display: grid;
+  gap: 1rem;
+  margin-top: 2rem;
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.5s 0.35s, transform 0.7s 0.35s var(--ease);
+}
+.mobile-menu.is-open .mobile-menu-foot { opacity: 1; transform: none; }
+.mobile-menu-foot .btn { min-height: 54px; font-size: 1rem; }
+.mobile-menu-foot p { margin: 0; text-align: center; font-family: var(--font-display); font-style: italic; font-size: 1.1rem; color: rgb(246 241 234 / 0.6); }
+
+html.menu-open, html.menu-open body { overflow: hidden; }
+html.menu-open .float-bar { transform: translate(-50%, 160%); }
+
+@media (prefers-reduced-motion: reduce) {
+  .mobile-menu, .mobile-menu-text, .mobile-menu-foot { transition: none; }
+}
+
+/* ---------- General phone polish ---------- */
+@media (max-width: 720px) {
+  /* Headline sits at the bottom of the hero on phones: keep it clear of the ribbons. */
+  .hero::after {
+    background:
+      linear-gradient(180deg, rgb(11 13 18 / 0.8), transparent 130px),
+      linear-gradient(0deg, rgb(11 13 18 / 0.94) 0%, rgb(11 13 18 / 0.82) 42%, rgb(11 13 18 / 0.25) 72%, transparent 100%);
+  }
+  .hero-inner { padding-bottom: 48px; }
+  .hero-actions { flex-direction: column; align-items: stretch; }
+  .hero-actions .btn { min-height: 54px; }
+
+  .brand { font-size: 1.7rem; }
+
+  /* Comfortable tap targets. */
+  .chip span { min-height: 44px; }
+  .float-bar a { min-height: 44px; display: inline-flex; align-items: center; }
+  .float-bar { bottom: max(14px, env(safe-area-inset-bottom)); }
+
+  .section { padding-block: 64px; }
+  .page-head { padding-block: 40px 24px; }
+  .marquee-item { font-size: 2.2rem; }
+  .occasion-list a { font-size: 2rem; }
+
+  .site-footer .wrap { flex-direction: column; align-items: flex-start; }
+  .site-footer { padding-bottom: 96px; } /* room for the floating bar */
+}
+
+/* ---------- Booking: sticky pay bar on phones ---------- */
+.pay-bar { display: none; }
+@media (max-width: 979px) {
+  .pay-bar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 40;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+    background: rgb(11 13 18 / 0.94);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    color: var(--paper);
+    box-shadow: 0 -12px 30px -18px rgb(11 13 18 / 0.5);
+    transform: translateY(0);
+    transition: transform 0.5s var(--ease);
+  }
+  .pay-bar.is-hidden { transform: translateY(110%); }
+  .pay-bar-amount small { display: block; font-size: 0.72rem; color: rgb(246 241 234 / 0.6); }
+  .pay-bar-amount strong { font-family: var(--font-display); font-size: 1.5rem; font-weight: 500; color: #d9b6ee; }
+  .pay-bar .btn { min-height: 48px; padding: 0 1.25rem; flex-shrink: 0; }
+  .booking-layout { padding-bottom: 120px; }
+}
+
+/* ---------- Admin on phones ---------- */
+.admin-login { width: min(400px, 100% - 32px); }
+
+@media (max-width: 720px) {
+  .admin-login { margin-top: 8vh; padding: 1.75rem; }
+  .admin-body .site-header .brand small { display: none; }
+  .admin-body .site-header .nav { gap: 0.5rem; }
+  .admin-body .site-header .btn { white-space: nowrap; }
+  .admin-body .page-head { padding-top: 24px; }
+  .status-select, #search { font-size: 16px; } /* 16px stops iOS zooming into the field */
+  .toolbar { flex-direction: column; align-items: stretch; }
+  .tabs { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
+  .tab { flex-shrink: 0; min-height: 40px; }
+
+  /* The bookings table becomes a stack of cards. */
+  .table-wrap { background: none; border: 0; overflow: visible; }
+  .table-wrap table, .table-wrap tbody, .table-wrap tr, .table-wrap td { display: block; width: 100%; }
+  .table-wrap thead { display: none; }
+  .table-wrap tr {
+    margin-bottom: 0.9rem;
+    padding: 1rem 1.1rem;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+  }
+  .table-wrap td { padding: 0.35rem 0; border: 0; }
+  .table-wrap td[data-label]::before {
+    content: attr(data-label);
+    display: block;
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .table-wrap td.empty::before { content: none; }
+}

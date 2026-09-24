@@ -31,7 +31,9 @@ function paletteColor(t, a, b, c, d, out) {
 
 function start() {
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  // Phones: fewer pixels to shade keeps the ribbons smooth and the battery happy.
+  const small = matchMedia('(max-width: 720px)').matches;
+  renderer.setPixelRatio(Math.min(devicePixelRatio, small ? 1.5 : 2));
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.1;
 

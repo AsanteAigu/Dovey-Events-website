@@ -671,3 +671,4 @@ td.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
 /* Home: occasions heading */
 .occasions-title { margin: 1rem 0 0; font-size: clamp(2rem, 4.2vw, 3.2rem); }
 .band blockquote > span { display: block; }
+.summary .summary-empty { margin-bottom: 1.25rem; }
