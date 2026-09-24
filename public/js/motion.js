@@ -1,7 +1,7 @@
 // Motion layer shared by the public pages: smooth scrolling (Lenis), scroll reveals
 // and headline line reveals (GSAP + ScrollTrigger + SplitText), a trailing cursor,
-// magnetic buttons, the occasions marquee, the rotating badge, the floating action
-// bar and the first-visit intro.
+// magnetic buttons, the occasions marquee, the floating action bar and the
+// first-visit intro.
 //
 // Pages opt in with attributes:
 //   data-reveal="lines"   headline rises line by line from behind a mask
@@ -24,7 +24,7 @@ const finePointer = matchMedia('(pointer: fine)').matches;
 const EASE = 'expo.out';
 
 let lenis;
-let scrollVelocity = 0; // px/s, smoothed; drives the marquee and badge
+let scrollVelocity = 0; // px/s, smoothed; drives the marquee
 
 if (enabled) {
   gsap.registerPlugin(ScrollTrigger, ...(SplitText ? [SplitText] : []));
@@ -39,7 +39,6 @@ function init() {
   setupVelocity();
   setupFloatBar();
   setupMarquee();
-  setupBadge();
   if (finePointer) {
     setupCursor();
     setupMagnetic();
@@ -170,7 +169,7 @@ function playIntro(intro) {
     .add(() => root.classList.remove('intro-pending'), '-=0.6');
 }
 
-// ---------- Marquee & badge (both speed up with scrolling) ----------
+// ---------- Marquee (speeds up with scrolling) ----------
 
 function setupMarquee() {
   document.querySelectorAll('.marquee').forEach((marquee) => {
@@ -186,15 +185,6 @@ function setupMarquee() {
     gsap.ticker.add(() => {
       const boost = Math.min(Math.abs(scrollVelocity) / 250, 6);
       loop.timeScale(gsap.utils.interpolate(loop.timeScale(), (scrollVelocity < 0 ? -1 : 1) * (1 + boost), 0.1));
-    });
-  });
-}
-
-function setupBadge() {
-  document.querySelectorAll('.badge-text').forEach((text) => {
-    const spin = gsap.to(text, { rotation: 360, duration: 22, ease: 'none', repeat: -1, transformOrigin: '50% 50%' });
-    gsap.ticker.add(() => {
-      spin.timeScale(gsap.utils.interpolate(spin.timeScale(), 1 + Math.min(Math.abs(scrollVelocity) / 150, 8), 0.08));
     });
   });
 }
