@@ -111,7 +111,7 @@ html.menu-open .float-bar { transform: translate(-50%, 160%); }
 
 /* ---------- General phone polish ---------- */
 @media (max-width: 720px) {
-  /* Headline sits at the bottom of the hero on phones: keep it clear of the ribbons. */
+  /* Headline sits at the bottom of the hero on phones: keep it clear of the backdrop. */
   .hero::after {
     background:
       linear-gradient(180deg, rgb(11 13 18 / 0.8), transparent 130px),

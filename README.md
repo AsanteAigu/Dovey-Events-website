@@ -17,7 +17,7 @@ Leave `DATABASE_URL` empty to develop against a local embedded Postgres (stored 
 
 | Page | What it's for |
 | --- | --- |
-| `/` | Homepage with the silk-ribbon hero |
+| `/` | Homepage with the draped-silk hero |
 | `/packages` | Packages, what's included, how booking works |
 | `/about` | About Dovey Events |
 | `/book` | Booking form with a live quote and date availability |
@@ -71,6 +71,6 @@ src/
   db.js         Postgres connection (Supabase, or PGlite locally)
   schema.js     tables, indexes and row-level security
 public/         HTML, CSS and browser JS (no framework)
-scripts/        copies three.js into public/vendor at install/build time
+scripts/        copies GSAP and Lenis into public/vendor at install/build time
 test/           node:test suites against an in-memory Postgres, with a fake Paystack
 ```

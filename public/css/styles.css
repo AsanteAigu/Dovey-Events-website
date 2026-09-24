@@ -192,12 +192,12 @@ h1 em, h2 em { font-style: italic; color: var(--accent); }
 }
 .hero canvas { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1; }
 .hero::after {
-  /* Fades the ribbons out behind the copy so it always stays readable. */
+  /* Fades the silk backdrop behind the copy so it always stays readable. */
   content: '';
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: linear-gradient(90deg, rgb(11 13 18 / 0.85) 0%, rgb(11 13 18 / 0.35) 55%, transparent 80%),
+  background: linear-gradient(90deg, rgb(11 13 18 / 0.78) 0%, rgb(11 13 18 / 0.2) 50%, transparent 70%),
               linear-gradient(0deg, rgb(11 13 18 / 0.7), transparent 40%),
               linear-gradient(180deg, rgb(11 13 18 / 0.75), transparent 140px);
   pointer-events: none;

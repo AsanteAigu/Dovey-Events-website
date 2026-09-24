@@ -6,14 +6,29 @@ function int(env, name, fallback) {
   return n;
 }
 
+const isLocalUrl = (url) => /^https?:\/\/(localhost|127\.0\.0\.1|0\.0\.0\.0)(:|\/|$)/i.test(url);
+
+/**
+ * Where Paystack sends customers back after paying. On Vercel it defaults to the
+ * production domain. A localhost PUBLIC_URL (easily copied over from a local .env)
+ * would strand paying customers on their own machine, so production ignores it.
+ */
+function resolvePublicUrl(env, isProd) {
+  const vercelUrl = env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${env.VERCEL_PROJECT_PRODUCTION_URL}` : '';
+  let url = env.PUBLIC_URL || vercelUrl || 'http://localhost:3000';
+  if (isProd && isLocalUrl(url)) {
+    if (!vercelUrl) throw new Error('PUBLIC_URL must be the public site address in production, not localhost');
+    console.warn(`Ignoring PUBLIC_URL=${url} in production; using ${vercelUrl}`);
+    url = vercelUrl;
+  }
+  return url.replace(/\/$/, '');
+}
+
 export function loadConfig(env = process.env) {
   const isProd = env.NODE_ENV === 'production';
   const config = {
     port: int(env, 'PORT', 3000),
-    // Where Paystack sends customers back. On Vercel, defaults to the production domain.
-    publicUrl: (env.PUBLIC_URL
-      || (env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${env.VERCEL_PROJECT_PRODUCTION_URL}` : 'http://localhost:3000')
-    ).replace(/\/$/, ''),
+    publicUrl: resolvePublicUrl(env, isProd),
     // Supabase (or any Postgres) connection string. Without it, local development
     // uses an embedded Postgres stored in localDataDir.
     databaseUrl: env.DATABASE_URL || '',
