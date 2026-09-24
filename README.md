@@ -52,7 +52,6 @@ src/
   catalog.js    packages, occasions, inclusions and extras
   db.js         SQLite schema
 public/         HTML, CSS and browser JS (no build step)
-CAND/           the original hand-built pages
 test/           node:test suites (a fake Paystack stands in for the real one)
 ```
 
