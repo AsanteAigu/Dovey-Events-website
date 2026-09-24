@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Your booking — Dovim</title>
+  <meta name="theme-color" content="#f6f1ea" />
+  <meta name="robots" content="noindex" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,500;0,600;1,500&family=Manrope:wght@400;500;600&display=swap" />
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+  <header class="site-header on-paper">
+    <div class="wrap">
+      <a class="brand" href="/">Dovim<span class="brand-dot" aria-hidden="true"></span></a>
+      <nav class="nav" aria-label="Main">
+        <a class="btn btn-sm" href="/book">Book a date</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="page-head" id="page-head" hidden>
+      <span class="eyebrow">My booking</span>
+      <h1>Find your <em>booking</em></h1>
+      <p class="lede">Enter the reference from your receipt and the email you booked with.</p>
+    </div>
+
+    <div id="view" aria-live="polite">
+      <div class="ticket"><div class="skeleton"></div></div>
+    </div>
+  </main>
+
+  <script type="module" src="/js/confirmation.js"></script>
+</body>
+</html>

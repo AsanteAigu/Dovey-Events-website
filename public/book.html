@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Book your date — Dovim</title>
+  <meta name="theme-color" content="#f6f1ea" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,500;0,600;1,500&family=Manrope:wght@400;500;600&display=swap" />
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+  <header class="site-header on-paper">
+    <div class="wrap">
+      <a class="brand" href="/">Dovim<span class="brand-dot" aria-hidden="true"></span></a>
+      <nav class="nav" aria-label="Main">
+        <a class="hide-sm" href="/#packages">Packages</a>
+        <a href="/confirmation">My booking</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="page-head">
+      <span class="eyebrow">Booking</span>
+      <h1>Let's hold your <em>date</em></h1>
+      <p class="lede">Tell us about your event. Your date is held for <span data-hold>30 minutes</span> while you pay the deposit, then it's yours.</p>
+    </div>
+
+    <form class="booking-layout" id="booking-form" novalidate>
+      <div>
+        <fieldset class="fieldset">
+          <legend><span>i.</span> The occasion</legend>
+          <div class="choice-grid" id="package-choices" role="radiogroup" aria-label="Package">
+            <div class="skeleton span-all"></div>
+          </div>
+          <p class="field-error" data-error-for="packageId"></p>
+        </fieldset>
+
+        <fieldset class="fieldset">
+          <legend><span>ii.</span> Date &amp; guests</legend>
+          <div class="fields two">
+            <div class="field" data-field="eventDate">
+              <label for="eventDate">Event date</label>
+              <input class="input" type="date" id="eventDate" name="eventDate" required />
+              <p class="date-status" id="date-status" aria-live="polite"></p>
+              <p class="field-error" data-error-for="eventDate"></p>
+            </div>
+            <div class="field" data-field="guests">
+              <label for="guests">Number of guests</label>
+              <input class="input" type="number" id="guests" name="guests" inputmode="numeric" min="1" step="1" required />
+              <span class="hint" id="guest-hint"></span>
+              <p class="field-error" data-error-for="guests"></p>
+            </div>
+            <div class="field full" data-field="venue">
+              <label for="venue">Venue <span class="hint">(optional)</span></label>
+              <input class="input" type="text" id="venue" name="venue" maxlength="200" placeholder="Venue name or area, if you have one" />
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset class="fieldset">
+          <legend><span>iii.</span> Extras</legend>
+          <div class="choice-grid" id="addon-choices"></div>
+          <p class="field-error" data-error-for="addOns"></p>
+        </fieldset>
+
+        <fieldset class="fieldset">
+          <legend><span>iv.</span> Your details</legend>
+          <div class="fields two">
+            <div class="field" data-field="name">
+              <label for="name">Full name</label>
+              <input class="input" type="text" id="name" name="name" autocomplete="name" maxlength="120" required />
+              <p class="field-error" data-error-for="name"></p>
+            </div>
+            <div class="field" data-field="phone">
+              <label for="phone">Phone</label>
+              <input class="input" type="tel" id="phone" name="phone" autocomplete="tel" placeholder="024 000 0000" maxlength="30" required />
+              <p class="field-error" data-error-for="phone"></p>
+            </div>
+            <div class="field full" data-field="email">
+              <label for="email">Email</label>
+              <input class="input" type="email" id="email" name="email" autocomplete="email" maxlength="254" required />
+              <span class="hint">Your receipt and booking reference go here.</span>
+              <p class="field-error" data-error-for="email"></p>
+            </div>
+            <div class="field full">
+              <label for="notes">Anything we should know? <span class="hint">(optional)</span></label>
+              <textarea class="input" id="notes" name="notes" maxlength="2000" placeholder="Theme, colours, timings, dietary needs…"></textarea>
+            </div>
+          </div>
+        </fieldset>
+      </div>
+
+      <aside class="summary" aria-labelledby="summary-title">
+        <h2 id="summary-title">Your quote</h2>
+        <div id="summary-content">
+          <p class="summary-empty">Choose a package to see your price.</p>
+        </div>
+        <button class="btn btn-gold btn-block" type="submit" id="submit">
+          Pay deposit &amp; hold date <span class="arrow" aria-hidden="true">→</span>
+        </button>
+        <div class="alert alert-bad" id="form-alert" role="alert"></div>
+        <p class="fine">Secure payment by Paystack · Mobile Money &amp; card</p>
+      </aside>
+    </form>
+  </main>
+
+  <script type="module" src="/js/book.js"></script>
+</body>
+</html>
