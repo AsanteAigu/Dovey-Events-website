@@ -1,5 +1,6 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
   "buildCommand": "npm run build",
   "outputDirectory": "public",
   "cleanUrls": true,
@@ -11,7 +12,6 @@
   ],
   "functions": {
     "api/index.js": {
-      "includeFiles": "db/**",
       "maxDuration": 30
     }
   },

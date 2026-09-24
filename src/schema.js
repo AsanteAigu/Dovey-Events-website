@@ -1,5 +1,6 @@
--- Dovey Events schema. Safe to run repeatedly: every statement is idempotent.
-
+// Dovey Events database schema. Kept in JS (not a .sql file) so serverless bundles
+// always include it. Safe to run repeatedly: every statement is idempotent.
+export const SCHEMA = `
 CREATE TABLE IF NOT EXISTS bookings (
   id              integer GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   reference       text        NOT NULL UNIQUE,
@@ -40,3 +41,4 @@ CREATE INDEX IF NOT EXISTS payments_booking ON payments (booking_id);
 -- connection (which bypasses RLS) can read or write customer data.
 ALTER TABLE bookings ENABLE ROW LEVEL SECURITY;
 ALTER TABLE payments ENABLE ROW LEVEL SECURITY;
+`;

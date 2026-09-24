@@ -1,9 +1,5 @@
-import { readFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
 import pg from 'pg';
-
-const SCHEMA = readFileSync(join(dirname(fileURLToPath(import.meta.url)), '../db/schema.sql'), 'utf8');
+import { SCHEMA } from './schema.js';
 
 const DATE_OID = 1082;
 

@@ -1,12 +1,14 @@
 // Vercel serverless entry point. vercel.json routes every /api/* request here;
 // the pages themselves are served statically from public/.
-import { createServerApp } from '../src/bootstrap.js';
-
+//
+// The app is imported lazily so that any start-up failure (a missing setting,
+// a bad database URL) becomes a readable error response instead of a crash.
 let instance;
 
 export default async function handler(req, res) {
   try {
-    const { app } = await (instance ??= createServerApp());
+    instance ??= import('../src/bootstrap.js').then((m) => m.createServerApp());
+    const { app } = await instance;
     return app(req, res);
   } catch (err) {
     instance = undefined;

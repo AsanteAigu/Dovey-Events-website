@@ -38,7 +38,7 @@ In the Vercel project, go to **Settings → Environment Variables** and add:
 | `SESSION_SECRET` | 32+ random characters: `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"` |
 | `PUBLIC_URL` | Optional. Defaults to the Vercel production domain; set it if you use a custom domain. |
 
-Then redeploy. The database tables are created automatically on the first request (see `db/schema.sql`), with row-level security switched on so Supabase's public API can't read customer data.
+Then redeploy. The database tables are created automatically on the first request (see `src/schema.js`), with row-level security switched on so Supabase's public API can't read customer data.
 
 Finally, in Paystack set the **webhook URL** to `https://<your-domain>/api/paystack/webhook`.
 
@@ -69,7 +69,7 @@ src/
   auth.js       admin sign-in (signed, HttpOnly cookie)
   catalog.js    packages, occasions, inclusions and extras
   db.js         Postgres connection (Supabase, or PGlite locally)
-db/schema.sql   tables, indexes and row-level security
+  schema.js     tables, indexes and row-level security
 public/         HTML, CSS and browser JS (no framework)
 scripts/        copies three.js into public/vendor at install/build time
 test/           node:test suites against an in-memory Postgres, with a fake Paystack
