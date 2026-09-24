@@ -1,4 +1,8 @@
 import { api } from './common.js';
+import { hydrateOccasionIcons } from './icons.js';
+
+// Before anything awaits, so the marquee is complete when motion.js duplicates it.
+hydrateOccasionIcons();
 
 try {
   const { depositPercent } = await api('/api/catalog');

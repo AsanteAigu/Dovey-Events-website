@@ -686,3 +686,19 @@ td.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
   .ticket-mark path { animation: none !important; }
   .ticket-ref { color: #7a3a9e; }
 }
+
+/* ---------- Occasion icons (js/icons.js) ---------- */
+.occasion-icon { flex-shrink: 0; width: 1.25em; height: 1.25em; }
+.chip span { gap: 0.5rem; }
+.chip .occasion-icon { width: 20px; height: 20px; color: var(--accent); transition: color 0.2s; }
+.chip input:checked + span .occasion-icon { color: #cfa6e6; }
+.occasion-name { display: inline-flex; align-items: center; gap: 0.9rem; }
+.occasion-list-icon { display: inline-flex; color: var(--accent); transition: color 0.4s var(--ease); }
+.occasion-list-icon .occasion-icon { width: 0.95em; height: 0.95em; stroke-width: 1.25; }
+.occasion-list a:hover .occasion-list-icon,
+.occasion-list a:focus-visible .occasion-list-icon { color: #cfa6e6; }
+.marquee-item { gap: 0.4em; }
+.marquee-icon { display: inline-flex; }
+.marquee-icon .occasion-icon { width: 0.8em; height: 0.8em; stroke-width: 1.1; }
+.admin-occasion, .detail-occasion { display: inline-flex; align-items: center; gap: 0.45rem; }
+.admin-occasion .occasion-icon, .detail-occasion .occasion-icon { width: 18px; height: 18px; color: var(--accent); }

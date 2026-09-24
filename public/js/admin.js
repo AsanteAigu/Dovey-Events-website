@@ -1,4 +1,5 @@
 import { api, formatDate, h, money, setBusy, STATUS_LABELS } from './common.js';
+import { occasionIcon } from './icons.js';
 
 const loginForm = document.getElementById('login');
 const dashboard = document.getElementById('dashboard');
@@ -103,7 +104,7 @@ function row(b) {
       h('span', { class: 'sub' }, h('a', { href: `tel:${b.customerPhone.replace(/[^\d+]/g, '')}` }, b.customerPhone)),
     ),
     h('td', { 'data-label': 'Event' },
-      `${b.occasion.name} · ${b.package.name}`,
+      h('span', { class: 'admin-occasion' }, occasionIcon(b.occasion.id), `${b.occasion.name} · ${b.package.name}`),
       h('span', { class: 'sub' }, `${b.guests} guests${b.venue ? ` · ${b.venue}` : ''}`),
       b.addOns.length ? h('span', { class: 'sub' }, b.addOns.map((a) => a.name).join(', ')) : null,
       b.notes ? h('span', { class: 'sub', title: b.notes }, `“${b.notes.length > 80 ? `${b.notes.slice(0, 80)}…` : b.notes}”`) : null,

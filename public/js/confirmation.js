@@ -1,5 +1,6 @@
 import { api, formatDate, h, money, setBusy, STATUS_LABELS } from './common.js';
 import { saveTicket } from './ticket-image.js';
+import { occasionIcon } from './icons.js';
 
 const view = document.getElementById('view');
 const pageHead = document.getElementById('page-head');
@@ -81,7 +82,7 @@ function ticket(booking) {
     ),
     h('div', { class: 'ticket-body' },
       h('dl', { class: 'details' },
-        detail('Occasion', booking.occasion.name),
+        detail('Occasion', h('span', { class: 'detail-occasion' }, occasionIcon(booking.occasion.id), booking.occasion.name)),
         detail('Package', booking.package.name),
         detail('Date', formatDate(booking.eventDate), true),
         detail('Guests', String(booking.guests)),

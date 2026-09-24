@@ -1,4 +1,5 @@
 import { api, formatDate, h, money, setBusy } from './common.js';
+import { occasionIcon } from './icons.js';
 
 const form = document.getElementById('booking-form');
 // form.elements.namedItem, not form.name: the form's own properties shadow fields called 'name'.
@@ -47,7 +48,7 @@ function renderChoices() {
     ...catalog.occasions.map((occasion) =>
       h('label', { class: 'chip' },
         h('input', { type: 'radio', name: 'occasion', value: occasion.id, required: true }),
-        h('span', {}, occasion.name),
+        h('span', {}, occasionIcon(occasion.id), occasion.name),
       ),
     ),
   );
